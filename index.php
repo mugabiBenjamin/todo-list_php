@@ -27,10 +27,12 @@ if (empty($_SESSION['csrf_token'])) {
         <h2>My To-Do List</h2>
 
         <form action="./php/add_task.php" method="POST">
-            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-            <input type="hidden" name="id" value="<?php echo $task['id']; ?>">
-            <input type="text" name="name" placeholder="Add your text here..." value="<?php echo htmlspecialchars($task['name']); ?>">
-            <input type="submit" value="Add" name="submit">
+            <div class="input-group">
+                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                <input type="hidden" name="id" value="<?php echo $task['id']; ?>">
+                <input type="text" name="name" placeholder="Add your text here..." value="<?php echo htmlspecialchars($task['name']); ?>">
+                <input type="submit" value="Add" name="submit">
+            </div>
         </form>
 
         <!-- Display error messages -->
@@ -51,12 +53,14 @@ if (empty($_SESSION['csrf_token'])) {
             <ul>
                 <?php foreach ($tasks as $task): ?>
                     <li>
-                        <div class="task-name"><?php echo htmlspecialchars($task['name']); ?></div>
-                        <div class="task-icons">
-                            <a href="./php/update_task.php?id=<?php echo $task['id']; ?>"><i class="bi bi-pencil-fill"></i></a>
-                            <a href="./php/delete_task.php?id=<?php echo $task['id']; ?>&csrf_token=<?php echo $_SESSION['csrf_token']; ?>">
-                                <i class="bi bi-trash3-fill"></i>
-                            </a>
+                        <input type="checkbox">
+                        <div class="task">
+                            <div class="task-name"><?php echo htmlspecialchars($task['name']); ?></div>
+                            <div class="delete-icon">
+                                <a href="./php/delete_task.php?id=<?php echo $task['id']; ?>&csrf_token=<?php echo $_SESSION['csrf_token']; ?>">
+                                    <i class="bi bi-trash3-fill"></i>
+                                </a>
+                            </div>
                         </div>
                     </li>
                 <?php endforeach; ?>
