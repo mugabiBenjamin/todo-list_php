@@ -129,13 +129,20 @@ ul li .task {
 }
 
 input[type="checkbox"] {
-    cursor: pointer;
-    accent-color: var(--primary-color);
-    clip-path: circle(50% at 50% 50%);
-    /* appearance: none; */
+    appearance: none;
     width: 20px;
     height: 20px;
     margin-right: 20px;
+    border-radius: 50%;
+    border: 1px solid var(--secondary_color);
+    accent-color: var(--primary-color);
+    /* clip-path: circle(50% at 50% 50%); */
+    cursor: pointer;
+}
+
+input[type="checkbox"]:checked {
+    /* background-color: var(--secondary-color); */
+    border: 5px solid var(--primary-color);
 }
 
 input[type="checkbox"]:checked ~ .task .task-name {
@@ -148,7 +155,6 @@ input[type="checkbox"]:checked ~ .task .task-name {
     font-size: 22px;
     color: var(--text-color);
     cursor: pointer;
-    /*  */
     transition: color 0.3 ease-in-out;
 }
 
@@ -170,7 +176,7 @@ input[type="checkbox"]:checked ~ .task .task-name {
         background-image: linear-gradient(315deg,lightgreen, lightsteelblue);
     }
     100% {
-        background-image: linear-gradient(45deg,lightsalmon, lightgoldenrodyellow);
+        background-image: linear-gradient(45deg, lightblue, lightcoral);
     }
 }
 

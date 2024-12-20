@@ -8,7 +8,6 @@ include_once './php/fetch_task.php';
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +29,7 @@ if (empty($_SESSION['csrf_token'])) {
             <div class="input-group">
                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                 <input type="hidden" name="id" value="<?php echo $task['id']; ?>">
-                <input type="text" name="name" placeholder="Add your text here..." value="<?php echo htmlspecialchars($task['name']); ?>">
+                <input type="text" name="name" maxlength="50" placeholder="Add your text here..." value="<?php echo htmlspecialchars($task['name']); ?>">
                 <input type="submit" value="Add" name="submit">
             </div>
         </form>
