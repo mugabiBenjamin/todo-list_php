@@ -1,7 +1,7 @@
 <?php
 session_start();
 include_once '../connection.php';
-include_once './task_validation.php';
+include_once './tasks/task_validation.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['id'], $_POST['name'], $_POST['csrf_token'])) {
 

@@ -19,11 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'], $_GET['csrf_token
         exit();
     }
 
-    // if ($stmt->rowCount() === 0) {
-    //     header("Location: ../index.php?error=Task not found.");
-    //     exit;
-    // }
-
     try {
         $stmt = $pdo->prepare("DELETE FROM tasks WHERE id = :id");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);

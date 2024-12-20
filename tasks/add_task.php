@@ -5,7 +5,7 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 include_once '../connection.php';
-include_once './task_validation.php';
+include_once 'task_validation.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
     $name = htmlspecialchars(sanitize_input($_POST['name']));

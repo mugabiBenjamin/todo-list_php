@@ -2,8 +2,8 @@
 session_start();
 
 include_once './connection.php';
-include_once './php/task_validation.php';
-include_once './php/fetch_task.php';
+include_once './tasks/task_validation.php';
+include_once './tasks/fetch_task.php';
 
 if (empty($_SESSION['csrf_token'])) {
     $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
@@ -25,7 +25,7 @@ if (empty($_SESSION['csrf_token'])) {
     <div class="container-md">
         <h2>My To-Do List</h2>
 
-        <form action="./php/add_task.php" method="POST">
+        <form action="./tasks/add_task.php" method="POST">
             <div class="input-group">
                 <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
                 <input type="hidden" name="id" value="<?php echo $task['id']; ?>">
@@ -56,7 +56,7 @@ if (empty($_SESSION['csrf_token'])) {
                         <div class="task">
                             <div class="task-name"><?php echo htmlspecialchars($task['name']); ?></div>
                             <div class="delete-icon">
-                                <a href="./php/delete_task.php?id=<?php echo $task['id']; ?>&csrf_token=<?php echo $_SESSION['csrf_token']; ?>">
+                                <a href="./tasks/delete_task.php?id=<?php echo $task['id']; ?>&csrf_token=<?php echo $_SESSION['csrf_token']; ?>">
                                     <i class="bi bi-trash3-fill"></i>
                                 </a>
                             </div>
