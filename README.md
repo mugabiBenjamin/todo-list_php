@@ -66,12 +66,15 @@ Before you begin, ensure you have the following installed on your system:
 
 ```
 .
-├── css/             # Static files
-├── database/        # SQL scripts for database setup
-├── config.php       # Database configuration
+├── css/             # Static files (stylesheets for frontend)
+├── database/
+│   └── todo.sql     # SQL script to set up the database schema
+├── config.php       # Database configuration file
 ├── tasks/           # Task-related functionality (CRUD operations)
-├── connection.php   # Establish a PDO connection to a MySQL database
-├── index.php        # Main entry point
+├── connection.php   # Establishes a PDO connection to the database
+├── .env             # Environment variables (e.g., database credentials; not included in version control)
+├── composer.json    # Composer configuration file
+├── index.php        # Main entry point of the application
 ├── README.md        # Project documentation
 ```
 
