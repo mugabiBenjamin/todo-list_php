@@ -2,6 +2,16 @@
 
 This project is a **Todo List Application** built with **PHP**, aimed at helping users efficiently manage and organize tasks. It provides core functionalities such as adding, editing, deleting, and marking tasks as complete, all in a user-friendly web interface.
 
+## Table of Contents
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Project Structure](#project-Structure)
+- [Contibuting](#contibuting)
+- [Acknowledgments](#Acknowledgments)
+- [Conatct](#conatct)
+
 ## Features
 
 - **Add Tasks**: Add new tasks to your todo list.
