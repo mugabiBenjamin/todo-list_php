@@ -49,10 +49,10 @@ body {
 form .input-group {
     display: flex;
     margin-bottom: 20px;
+    width: 100%;
 }
 
 .input-group input[type="text"] {
-    flex-grow: 1;
     border: 1px solid var(--secondary_color);
     outline: none;
     background: var(--secondary_color);

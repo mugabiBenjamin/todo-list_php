@@ -23,6 +23,6 @@ CREATE TABLE `tasks` (
 -- Insert sample data into the tasks table
 INSERT INTO `tasks` 
 VALUES
-(1,'starter','2024-11-18 09:42:39');
+();
 
 -- Dump completed on 2024-11-18 12:46:52
