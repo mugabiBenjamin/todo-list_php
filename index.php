@@ -27,10 +27,10 @@ if (empty($_SESSION['csrf_token'])) {
 
         <form action="./tasks/add_task.php" method="POST">
             <div class="input-group">
-                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                <input type="hidden" name="id" value="<?php echo $task['id']; ?>">
                 <input type="text" name="name" maxlength="50" placeholder="Add your text here..." value="<?php echo htmlspecialchars($task['name']); ?>">
                 <input type="submit" value="Add" name="submit">
+                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
+                <input type="hidden" name="id" value="<?php echo $task['id']; ?>">
             </div>
         </form>
 
