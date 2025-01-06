@@ -15,8 +15,7 @@ This project is a **Todo List Application** built with **PHP**, aimed at helping
 
 ## Features
 
-- **Add Tasks**: Add new tasks to your todo list.
-- **Edit Tasks**: Modify task details with ease.
+- **Add Tasks**: Add new tasks to your todo list.   <!-- - **Edit Tasks**: Modify task details with ease. -->
 - **Delete Tasks**: Remove completed or unnecessary tasks.
 - **Mark Tasks as Complete**: Keep track of finished tasks.
 - **Persistent Storage**: Tasks are stored in a database for durability.
@@ -50,7 +49,7 @@ Before you begin, ensure you have the following installed on your system:
 
 3. **Configure the Database Connection**
 
-   Update the database credentials in `config.env`:
+   Update the database credentials in `.env`:
 
    ```env
    DB_HOST=localhost
@@ -59,7 +58,7 @@ Before you begin, ensure you have the following installed on your system:
    DB_NAME=your-database-name
    ```
 
-   Rename `config.env.example` to `config.env` and update the values accordingly.
+   Rename `config.env.example` to `.env` and update the values accordingly.
 
 4. **Run the Application**
 
@@ -96,23 +95,23 @@ Before you begin, ensure you have the following installed on your system:
 Contributions are welcome! If you'd like to improve this project:
 
 1. Fork the repository.
-2. Clone the repository
+2. **Clone the repository:**
    ```bash
    git clone https://github.com/mugabiBenjamin/todo-list_php.git
    ```
-3. Navigate to the project directory:
+3. **Navigate to the project directory:**
    ```bash
    cd todo-list_php/
    ```
-4. Create a feature branch:
+4. **Create a feature branch:**
    ```bash
    git checkout -b feature-name
    ```
-5. Commit your changes:
+5. **Commit your changes:**
    ```bash
    git commit -m 'Add a meaningful message'
    ```
-6. Push to the branch: 
+6. **Push to the branch: **
    ```bash
    git push origin feature-name
    ```
@@ -120,7 +119,7 @@ Contributions are welcome! If you'd like to improve this project:
 
 ## License
 
-This project is licensed under the [MIT LICENCE]()
+- This project is licensed under the [MIT LICENCE]()
 
 ## Acknowledgments
 
