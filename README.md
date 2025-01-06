@@ -7,10 +7,11 @@ This project is a **Todo List Application** built with **PHP**, aimed at helping
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Usage](#usage)
-- [Project Structure](#project-Structure)
-- [Contibuting](#contibuting)
-- [Acknowledgments](#Acknowledgments)
-- [Conatct](#conatct)
+- [Project Structure](#project-structure)
+- [Contributing](#contributing)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
+- [Contact](#contact)
 
 ## Features
 
@@ -47,17 +48,18 @@ Before you begin, ensure you have the following installed on your system:
      mysql -u [username] -p [database_name] < database/todo.sql
      ```
 
-
 3. **Configure the Database Connection**
 
-   Update the database credentials in `config.php`:
+   Update the database credentials in `config.env`:
 
-   ```php
-   define('DB_HOST', 'localhost');
-   define('DB_USER', 'your_username');
-   define('DB_PASS', 'your_password');
-   define('DB_NAME', 'todo_list');
+   ```env
+   DB_HOST=localhost
+   DB_USERNAME=your-username
+   DB_PASSWORD=your-password
+   DB_NAME=your-database-name
    ```
+
+   Rename `config.env.example` to `config.env` and update the values accordingly.
 
 4. **Run the Application**
 
@@ -76,16 +78,17 @@ Before you begin, ensure you have the following installed on your system:
 
 ```
 .
-├── css/             # Static files (stylesheets for frontend)
+├── css/                # Static files (stylesheets for frontend)
 ├── database/
-│   └── todo.sql     # SQL script to set up the database schema
-├── config.php       # Database configuration file
-├── tasks/           # Task-related functionality (CRUD operations)
-├── connection.php   # Establishes a PDO connection to the database
-├── .env             # Environment variables (e.g., database credentials; not included in version control)
-├── composer.json    # Composer configuration file
-├── index.php        # Main entry point of the application
-├── README.md        # Project documentation
+│   └── todo.sql        # SQL script to set up the database schema
+├── config.php          # Database configuration file
+├── config.env.example  # Example environment configuration file
+├── tasks/              # Task-related functionality (CRUD operations)
+├── connection.php      # Establishes a PDO connection to the database
+├── .env                # Environment variables (e.g., database credentials; not included in version control)
+├── composer.json       # Composer configuration file
+├── index.php           # Main entry point of the application
+├── README.md           # Project documentation
 ```
 
 ## Contributing
@@ -93,10 +96,31 @@ Before you begin, ensure you have the following installed on your system:
 Contributions are welcome! If you'd like to improve this project:
 
 1. Fork the repository.
-2. Create a feature branch (`git checkout -b feature-name`).
-3. Commit your changes (`git commit -m 'Add a feature'`).
-4. Push to the branch (`git push origin feature-name`).
-5. Open a Pull Request.
+2. Clone the repository
+   ```bash
+   git clone https://github.com/mugabiBenjamin/todo-list_php.git
+   ```
+3. Navigate to the project directory:
+   ```bash
+   cd todo-list_php/
+   ```
+4. Create a feature branch:
+   ```bash
+   git checkout -b feature-name
+   ```
+5. Commit your changes:
+   ```bash
+   git commit -m 'Add a meaningful message'
+   ```
+6. Push to the branch: 
+   ```bash
+   git push origin feature-name
+   ```
+7. Open a Pull Request.
+
+## License
+
+This project is licensed under the [MIT LICENCE]()
 
 ## Acknowledgments
 
@@ -105,7 +129,12 @@ Contributions are welcome! If you'd like to improve this project:
 ## Contact
 
 For inquiries or support, contact:
-- [Mugabi Benjamin](https://github.com/mugabiBenjamin)
+
+- **Mugabi Benjamin:** [GitHub](https://github.com/mugabiBenjamin)
+- **Email:** mugabiben6@gmail.com
+- **LinkedIn:** [Mugabi Benjamin](https://www.linkedin.com/in/mugabi-benjamin-156603224/)
+
+Feel free to reach out with any questions or feedback!
 
 ---
 Visit the [GitHub Repository](https://github.com/mugabiBenjamin/todo-list_php) for more details.
