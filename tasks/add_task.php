@@ -8,7 +8,7 @@ include_once '../connection.php';
 include_once 'task_validation.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit'])) {
-    $name = htmlspecialchars(sanitize_input($_POST['name']));
+    // $name = htmlspecialchars(sanitize_input($_POST['name']));
 
     if ($_POST['csrf_token'] !== $_SESSION['csrf_token']) {
         die("CSRF token validation failed.");
