@@ -22,45 +22,49 @@ if (empty($_SESSION['csrf_token'])) {
 </head>
 
 <body>
+    <div class="messages">
+        <!-- Display error messages -->
+        <?php if (isset($_GET['error'])): ?>
+            <div class="error" role="alert"><?php echo htmlspecialchars($_GET['error']); ?></div>
+        <?php endif; ?>
+
+        <!-- Display success messages -->
+        <?php if (isset($_GET['success'])): ?>
+            <div class="success" role="alert"><?php echo htmlspecialchars($_GET['success']); ?></div>
+        <?php endif; ?>
+    </div>
+
     <div class="container-md">
         <h2>My To-Do List</h2>
 
         <form action="./tasks/add_task.php" method="POST">
-            <div class="input-group">
-                <input type="text" name="name" maxlength="50" placeholder="Add your text here..." value="<?php echo htmlspecialchars($task['name']); ?>">
-                <input type="submit" value="Add" name="submit">
-                <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
-                <input type="hidden" name="id" value="<?php echo $task['id']; ?>">
-            </div>
+
+            <input type="text" name="name" maxlength="50" placeholder="Add your task here..." value="<?php echo htmlspecialchars($task['name']); ?>">
+            <input type="submit" value="Add" name="submit">
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>">
         </form>
-
-        <!-- Display error messages -->
-        <?php if (isset($_GET['error'])): ?>
-            <div class="error"><?php echo htmlspecialchars($_GET['error']); ?></div>
-        <?php endif; ?>
-
-        <!-- Display success messages -->
-        <?php if (isset($_GET['success']) && $_GET['success'] === 'true'): ?>
-            <div class="success">Task added successfully!</div>
-        <?php elseif (isset($_GET['success']) && $_GET['success'] === 'deleted'): ?>
-            <div class="success">Task deleted successfully!</div>
-        <?php elseif (isset($_GET['success']) && $_GET['success'] === 'updated'): ?>
-            <div class="success">Task updated successfully!</div>
-        <?php endif; ?>
 
         <?php if (!empty($tasks)): ?>
             <ul>
                 <?php foreach ($tasks as $task): ?>
                     <li>
-                        <input type="checkbox">
-                        <div class="task">
-                            <div class="task-name"><?php echo htmlspecialchars($task['name']); ?></div>
-                            <div class="delete-icon">
-                                <a href="./tasks/delete_task.php?id=<?php echo $task['id']; ?>&csrf_token=<?php echo $_SESSION['csrf_token']; ?>">
-                                    <i class="bi bi-trash3-fill"></i>
-                                </a>
+                        <a href="./tasks/toggle_completion.php?id=<?php echo $task['id']; ?>&csrf_token=<?php echo $_SESSION['csrf_token']; ?>" class="task-toggle">
+                            <input type="checkbox"
+                                class="task-checkbox"
+                                <?php echo $task['completed'] ? 'checked' : ''; ?>
+                                tabindex="-1"
+                                readonly>
+                            <div class="task">
+                                <div class="task-name <?php echo $task['completed'] ? 'completed' : ''; ?>">
+                                    <?php echo htmlspecialchars($task['name']); ?>
+                                </div>
+                                <div class="delete-icon">
+                                    <a href="./tasks/delete_task.php?id=<?php echo $task['id']; ?>&csrf_token=<?php echo $_SESSION['csrf_token']; ?>">
+                                        <i class="bi bi-trash3-fill"></i>
+                                    </a>
+                                </div>
                             </div>
-                        </div>
+                        </a>
                     </li>
                 <?php endforeach; ?>
             </ul>

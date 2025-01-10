@@ -17,6 +17,7 @@ CREATE TABLE `tasks` (
     `id` INT NOT NULL AUTO_INCREMENT,                      -- Primary key for the task
     `name` VARCHAR(50) NOT NULL,                          -- Name of the task
     `created_at` TIMESTAMP(6) NULL DEFAULT CURRENT_TIMESTAMP(6), -- Timestamp for when the task was created
+    `completed` BOOLEAN NOT NULL DEFAULT 0,               -- Whether the task is completed or not
     PRIMARY KEY (`id`)                                     -- Define the primary key
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
