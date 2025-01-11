@@ -12,7 +12,7 @@ A robust and user-friendly Todo List application built with **PHP** and **MySQL*
 - [Installation](#installation)
 - [Usage](#usage)
 - [Project Structure](#project-structure)
-- [Security-features](#-security-features)
+- [Security Features](#-security-features)
 - [Contributing](#contributing)
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
@@ -115,6 +115,7 @@ Before you begin, ensure you have the following installed on your system:
 ├── config.env.example  # Example environment configuration file
 ├── connection.php      # Establishes a PDO connection to the database
 ├── index.php           # Main entry point of the application
+├── LICENSE             # License information
 ├── README.md           # Project documentation
 ```
 
@@ -124,7 +125,6 @@ Before you begin, ensure you have the following installed on your system:
 - Input sanitization and validation
 - Prepared SQL statements
 - XSS prevention through HTML escaping
-- Secure password hashing (for future auth)
 
 ## 🤝 Contributing
 
