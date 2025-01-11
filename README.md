@@ -1,6 +1,10 @@
-# Todo List in PHP
+# PHP Todo List Application
 
-This project is a **Todo List Application** built with **PHP**, aimed at helping users efficiently manage and organize tasks. It provides core functionalities such as adding, editing, deleting, and marking tasks as complete, all in a user-friendly web interface.
+[![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+[![PHP Version](https://img.shields.io/badge/PHP-7.4%2B-blue.svg)](https://www.php.net/downloads)
+[![MySQL](https://img.shields.io/badge/MySQL-5.7%2B-orange.svg)](https://www.mysql.com)
+
+A robust and user-friendly Todo List application built with **PHP** and **MySQL**, featuring a responsive interface and secure task management capabilities.
 
 ## Table of Contents
 - [Features](#features)
@@ -8,29 +12,43 @@ This project is a **Todo List Application** built with **PHP**, aimed at helping
 - [Installation](#installation)
 - [Usage](#usage)
 - [Project Structure](#project-structure)
+- [Security-features](#-security-features)
 - [Contributing](#contributing)
 - [License](#license)
 - [Acknowledgments](#acknowledgments)
 - [Contact](#contact)
 
-## Features
+## 🚀 Features
 
-- **Add Tasks**: Add new tasks to your todo list.   <!-- - **Edit Tasks**: Modify task details with ease. -->
-- **Delete Tasks**: Remove completed or unnecessary tasks.
-- **Mark Tasks as Complete**: Keep track of finished tasks.
-- **Persistent Storage**: Tasks are stored in a database for durability.
-- **Responsive Interface**: A clean, intuitive design for enhanced user experience.
+- **Task Management**
+  - Create and add new tasks
+  - Mark tasks as complete/incomplete
+  - Delete unnecessary tasks
+  - Real-time status updates
+  
+- **Security**
+  - CSRF protection
+  - Input sanitization
+  - SQL injection prevention
+  - XSS attack prevention
 
-## Prerequisites
+- **User Experience**
+  - Responsive design
+  - Intuitive interface
+  - Animated notifications
+  - Real-time updates
+
+## 📋 Prerequisites
 
 Before you begin, ensure you have the following installed on your system:
 
 - [PHP](https://www.php.net/downloads) (version 7.4 or higher)
-- [MySQL](https://www.mysql.com/downloads/)
-- [Apache](https://httpd.apache.org/download.cgi) or any web server
-- Composer (optional, for dependency management)
+- [MySQL](https://www.mysql.com/downloads/) (version 5.7 or higher)
+- [Apache](https://httpd.apache.org/download.cgi) or [Nginx](https://nginx.org/en/download.html) web server
+- [Composer](https://getcomposer.org/download/) (optional, for dependency management)
+- Web browser (Chrome, Firefox, Safari, or Edge)
 
-## Installation
+## 🛠️ Installation
 
 1. **Clone the Repository**
 
@@ -39,58 +57,76 @@ Before you begin, ensure you have the following installed on your system:
    cd todo-list_php
    ```
 
-2. **Set Up the Database**
+2. **Install dependencies**
+   ```bash
+   composer install
+   ```
 
+3. **Configure environment variables**
+   ```bash
+   cp config.env.example .env
+   ```
+   Edit `.env` with your database credentials:
+   ```env
+   DB_HOST=localhost
+   DB_USERNAME=your_username
+   DB_PASSWORD=your_password
+   DB_NAME=your_database_name
+   ```
+
+4. **Set Up the Database**
    - Create a new database (e.g., `todo_list`).
    - Import the provided SQL file into the database:
      ```bash
      mysql -u [username] -p [database_name] < database/todo.sql
      ```
 
-3. **Configure the Database Connection**
+5. **Configure web server**
+   - For Apache: Ensure mod_rewrite is enabled
+   - For Nginx: Configure URL rewriting
 
-   Update the database credentials in `.env`:
-
-   ```env
-   DB_HOST=localhost
-   DB_USERNAME=your-username
-   DB_PASSWORD=your-password
-   DB_NAME=your-database-name
-   ```
-
-   Rename `config.env.example` to `.env` and update the values accordingly.
-
-4. **Run the Application**
-
+6. **Run the Application**
    - Start your web server.
    - Place the project folder in the server's root directory (e.g., `htdocs` for XAMPP or `www` for WAMP).
    - Access the application via `http://localhost/todo-list_php` in your browser.
 
-## Usage
+## 💻 Usage
 
-1. Open the application in your web browser.
-2. Add tasks using the input form.
-3. Mark tasks as completed or delete them as needed.
-4. Edit task details directly in the interface.
+1. Access the application through your web browser:
+   ```
+   http://localhost/todo-list_php
+   ```
 
-## Project Structure
+2. Add tasks using the input field at the top
+3. Click the checkbox to mark tasks as complete
+4. Use the trash icon to delete tasks
+5. Tasks are automatically saved to the database
+
+## 🔧 Project Structure
 
 ```
 .
 ├── css/                # Static files (stylesheets for frontend)
 ├── database/
 │   └── todo.sql        # SQL script to set up the database schema
-├── config.php          # Database configuration file
-├── config.env.example  # Example environment configuration file
 ├── tasks/              # Task-related functionality (CRUD operations)
-├── connection.php      # Establishes a PDO connection to the database
-├── .env                # Environment variables (e.g., database credentials; not included in version control)
+├── .gitignore          # Git ignore rules
 ├── composer.json       # Composer configuration file
+├── config.env.example  # Example environment configuration file
+├── connection.php      # Establishes a PDO connection to the database
 ├── index.php           # Main entry point of the application
 ├── README.md           # Project documentation
 ```
 
-## Contributing
+## 🔒 Security Features
+
+- CSRF token validation for forms
+- Input sanitization and validation
+- Prepared SQL statements
+- XSS prevention through HTML escaping
+- Secure password hashing (for future auth)
+
+## 🤝 Contributing
 
 Contributions are welcome! If you'd like to improve this project:
 
@@ -117,23 +153,29 @@ Contributions are welcome! If you'd like to improve this project:
    ```
 7. Open a Pull Request.
 
-## License
+## 📝 License
 
-- This project is licensed under the [MIT LICENCE]()
+- This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
 
-## Acknowledgments
+## 👥 Authors
 
-- Special thanks to contributors and open-source libraries used in this project.
+- **Mugabi Benjamin**
+  - GitHub: [@mugabiBenjamin](https://github.com/mugabiBenjamin)
+  - LinkedIn: [Mugabi Benjamin](https://www.linkedin.com/in/mugabi-benjamin-156603224/)
+  - Email: mugabiben6@gmail.com
 
-## Contact
+## 🙏 Acknowledgments
 
-For inquiries or support, contact:
+- [PHP Documentation](https://www.php.net/docs.php)
+- [MySQL Documentation](https://dev.mysql.com/doc/)
+- [Bootstrap Icons](https://icons.getbootstrap.com/)
+- All contributors who have helped improve this project
 
-- **Mugabi Benjamin:** [GitHub](https://github.com/mugabiBenjamin)
-- **Email:** mugabiben6@gmail.com
-- **LinkedIn:** [Mugabi Benjamin](https://www.linkedin.com/in/mugabi-benjamin-156603224/)
+## 📞 Support
 
-Feel free to reach out with any questions or feedback!
+For support and queries:
+- Create an [Issue](https://github.com/mugabiBenjamin/todo-list_php/issues)
+- Email: mugabiben6@gmail.com
+- LinkedIn: [Mugabi Benjamin](https://www.linkedin.com/in/mugabi-benjamin-156603224/)
 
----
-Visit the [GitHub Repository](https://github.com/mugabiBenjamin/todo-list_php) for more details.
+⭐ Star this repository if you find it helpful!
