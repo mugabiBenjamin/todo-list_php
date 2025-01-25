@@ -107,18 +107,23 @@ Before you begin, ensure you have the following installed on your system:
 ## 🔧 Project Structure
 
 ```
-.
-├── css/                # Static files (stylesheets for frontend)
-├── database/
-│   └── todo.sql        # SQL script to set up the database schema
-├── tasks/              # Task-related functionality (CRUD operations)
-├── .gitignore          # Git ignore rules
-├── composer.json       # Composer configuration file
-├── config.env.example  # Example environment configuration file
-├── connection.php      # Establishes a PDO connection to the database
-├── index.php           # Main entry point of the application
-├── LICENSE             # License information
-├── README.md           # Project documentation
+└── todo-list_php/
+   ├── README.md                       # Project documentation
+   ├── LICENSE                         # License information
+   ├── composer.json                   # Composer dependencies and scripts
+   ├── config.env.example              # Example environment configuration file
+   ├── connection.php                  # Database connection setup
+   ├── index.php                       # Main entry point of the application
+   ├── css/ 
+   │   └── todo.css                    # Stylesheet for the application
+   ├── database/  
+   │   └── todo.sql                    # SQL file to set up the database schema
+   └── tasks/  
+      ├── add_task.php                 # Script to add a new task
+      ├── delete_task.php              # Script to delete a task
+      ├── fetch_task.php               # Script to fetch tasks from the database
+      ├── task_validation.php          # Script to validate task input
+      └── toggle_completion.php        # Script to toggle task completion status
 ```
 
 ## 🔒 Security Features
