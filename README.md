@@ -9,18 +9,19 @@
 A robust and user-friendly Todo List application built with **PHP** and **MySQL**, featuring a responsive interface and secure task management capabilities.
 
 ## Table of Contents
-- [Features](#features)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [Security Features](#-security-features)
-- [Contributing](#contributing)
-- [License](#license)
-- [Acknowledgments](#acknowledgments)
-- [Contact](#contact)
+- [🚀Features](#features)
+- [📋Prerequisites](#prerequisites)
+- [🛠Installation](#installation)
+- [💻Usage](#usage)
+- [🔧Project Structure](#project-structure)
+- [🔒Security Features](#security-features)
+- [🤝Contributing](#contributing)
+- [📝License](#license)
+- [👥Authors](#authors)
+- [🙏Acknowledgments](#acknowledgments)
+- [📞Support](#support)
 
-## 🚀 Features
+## 🚀Features
 
 - **Task Management**
   - Create and add new tasks
@@ -40,7 +41,7 @@ A robust and user-friendly Todo List application built with **PHP** and **MySQL*
   - Animated notifications
   - Real-time updates
 
-## 📋 Prerequisites
+## 📋Prerequisites
 
 Before you begin, ensure you have the following installed on your system:
 
@@ -50,7 +51,7 @@ Before you begin, ensure you have the following installed on your system:
 - [Composer](https://getcomposer.org/download/) (optional, for dependency management)
 - Web browser (Chrome, Firefox, Safari, or Edge)
 
-## 🛠️ Installation
+## 🛠Installation
 
 1. **Clone the Repository**
 
@@ -92,7 +93,7 @@ Before you begin, ensure you have the following installed on your system:
    - Place the project folder in the server's root directory (e.g., `htdocs` for XAMPP or `www` for WAMP).
    - Access the application via `http://localhost/todo-list_php` in your browser.
 
-## 💻 Usage
+## 💻Usage
 
 1. Access the application through your web browser:
    ```
@@ -104,7 +105,7 @@ Before you begin, ensure you have the following installed on your system:
 4. Use the trash icon to delete tasks
 5. Tasks are automatically saved to the database
 
-## 🔧 Project Structure
+## 🔧Project Structure
 
 ```
 └── todo-list_php/
@@ -126,14 +127,14 @@ Before you begin, ensure you have the following installed on your system:
       └── toggle_completion.php        # Script to toggle task completion status
 ```
 
-## 🔒 Security Features
+## 🔒Security Features
 
 - CSRF token validation for forms
 - Input sanitization and validation
 - Prepared SQL statements
 - XSS prevention through HTML escaping
 
-## 🤝 Contributing
+## 🤝Contributing
 
 Contributions are welcome! If you'd like to improve this project:
 
@@ -160,25 +161,25 @@ Contributions are welcome! If you'd like to improve this project:
    ```
 7. Open a Pull Request.
 
-## 📝 License
+## 📝License
 
 - This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
 
-## 👥 Authors
+## 👥Authors
 
 - **Mugabi Benjamin**
   - GitHub: [@mugabiBenjamin](https://github.com/mugabiBenjamin)
   - LinkedIn: [Mugabi Benjamin](https://www.linkedin.com/in/mugabi-benjamin-156603224/)
   - Email: mugabiben6@gmail.com
 
-## 🙏 Acknowledgments
+## 🙏Acknowledgments
 
 - [PHP Documentation](https://www.php.net/docs.php)
 - [MySQL Documentation](https://dev.mysql.com/doc/)
 - [Bootstrap Icons](https://icons.getbootstrap.com/)
 - All contributors who have helped improve this project
 
-## 📞 Support
+## 📞Support
 
 For support and queries:
 - Create an [Issue](https://github.com/mugabiBenjamin/todo-list_php/issues)
