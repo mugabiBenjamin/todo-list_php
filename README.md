@@ -187,3 +187,5 @@ For support and queries:
 - LinkedIn: [Mugabi Benjamin](https://www.linkedin.com/in/mugabi-benjamin-156603224/)
 
 ⭐ Star this repository if you find it helpful!
+
+[Back to Top](#php-todo-list-application)
