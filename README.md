@@ -9,17 +9,17 @@
 A robust and user-friendly Todo List application built with **PHP** and **MySQL**, featuring a responsive interface and secure task management capabilities.
 
 ## Table of Contents
-- [🚀Features](#features)
-- [📋Prerequisites](#prerequisites)
-- [🛠Installation](#installation)
-- [💻Usage](#usage)
-- [🔧Project Structure](#project-structure)
-- [🔒Security Features](#security-features)
-- [🤝Contributing](#contributing)
-- [📝License](#license)
-- [👥Authors](#authors)
-- [🙏Acknowledgments](#acknowledgments)
-- [📞Support](#support)
+1. [Features](#features)
+2. [Prerequisites](#prerequisites)
+3. [Installation](#installation)
+4. [Usage](#usage)
+5. [Project Structure](#project-structure)
+6. [Security Features](#security-features)
+7. [Contributing](#contributing)
+8. [License](#license)
+9. [Authors](#authors)
+10. [Acknowledgments](#acknowledgments)
+11. [Support](#support)
 
 ## 🚀Features
 
