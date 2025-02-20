@@ -139,27 +139,20 @@ Before you begin, ensure you have the following installed on your system:
 Contributions are welcome! If you'd like to improve this project:
 
 1. Fork the repository.
-2. **Clone the repository:**
+
+2. Create a feature branch:
    ```bash
-   git clone https://github.com/mugabiBenjamin/todo-list_php.git
+   git checkout -b feature/feature-name
    ```
-3. **Navigate to the project directory:**
-   ```bash
-   cd todo-list_php/
-   ```
-4. **Create a feature branch:**
-   ```bash
-   git checkout -b feature-name
-   ```
-5. **Commit your changes:**
+3. Commit your changes:
    ```bash
    git commit -m 'Add a meaningful message'
    ```
-6. **Push to the branch: **
+4. Push to the branch:
    ```bash
-   git push origin feature-name
+   git push origin feature/feature-name
    ```
-7. Open a Pull Request.
+5. Open a Pull Request.
 
 ## 📝License
 
@@ -174,10 +167,10 @@ Contributions are welcome! If you'd like to improve this project:
 
 ## 🙏Acknowledgments
 
+All contributors who have helped improve this project
 - [PHP Documentation](https://www.php.net/docs.php)
 - [MySQL Documentation](https://dev.mysql.com/doc/)
 - [Bootstrap Icons](https://icons.getbootstrap.com/)
-- All contributors who have helped improve this project
 
 ## 📞Support
 
