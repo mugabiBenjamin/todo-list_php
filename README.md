@@ -112,7 +112,7 @@ Before you begin, ensure you have the following installed on your system:
    ├── README.md                       # Project documentation
    ├── LICENSE                         # License information
    ├── composer.json                   # Composer dependencies and scripts
-   ├── config.env.example              # Example environment configuration file
+   ├── .env.example                    # Example environment configuration file
    ├── connection.php                  # Database connection setup
    ├── index.php                       # Main entry point of the application
    ├── css/ 
