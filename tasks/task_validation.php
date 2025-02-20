@@ -1,7 +1,5 @@
 <?php
 
-include_once '../connection.php';
-
 function sanitize_input($data)
 {
     $data = trim($data);
