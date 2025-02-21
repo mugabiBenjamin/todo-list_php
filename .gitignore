@@ -3,7 +3,6 @@
 
 # Dependency files
 vendor/
-composer.lock
 
 # Update_task file not necessary
 tasks/update_task.php 
