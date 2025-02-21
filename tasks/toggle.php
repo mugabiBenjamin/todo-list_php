@@ -1,6 +1,6 @@
 <?php
 session_start();
-include_once '../connection.php';
+include_once '../config.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
     if (!isset($_GET['csrf_token']) || $_GET['csrf_token'] !== $_SESSION['csrf_token']) {
