@@ -28,6 +28,20 @@ class TaskController
 
     public function store($data)
     {
+        $name = Security::sanitize($data['name']);
+
+        if (strlen($name) < 3 || strlen($name) > 255) {
+            http_response_code(400);
+            echo "Task name must be between 3 and 255 characters.";
+            exit;
+        }
+
+        if (!Security::checkRateLimit('task_create', 10, 60)) {
+            http_response_code(429);
+            echo "Too many requests. Please try again later.";
+            exit;
+        }
+
         Security::verifyCsrfToken($data['csrf_token']);
         $name = Security::sanitize($data['name']);
         $task = new Task(null, $name, 0);

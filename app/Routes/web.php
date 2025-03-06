@@ -26,7 +26,7 @@ try {
         exit;
     } elseif (preg_match('/\/edit\/(\d+)/', $uri, $matches) && $method === 'GET') {
         $id = filter_var($matches[1], FILTER_VALIDATE_INT);
-        if ($id === false) {
+        if ($id === false || $id < 1) {
             http_response_code(400);
             echo "Invalid task ID format";
             exit;

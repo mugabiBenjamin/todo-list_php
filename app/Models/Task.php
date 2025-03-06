@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Database\DatabaseManager;
-use App\Helpers\Security; // Correct namespace here
 use PDO;
 
 class Task
@@ -19,6 +18,18 @@ class Task
         $this->completed = $completed;
     }
 
+    public function save(DatabaseManager $db)
+    {
+        $stmt = $db->getConnection()->prepare("INSERT INTO tasks (name, completed) VALUES (?, ?)");
+        $stmt->execute([$this->name, $this->completed]);
+    }
+
+    public function update(DatabaseManager $db)
+    {
+        $stmt = $db->getConnection()->prepare("UPDATE tasks SET name = ?, completed = ? WHERE id = ?");
+        $stmt->execute([$this->name, $this->completed, $this->id]);
+    }
+
     public static function all(DatabaseManager $db)
     {
         $stmt = $db->getConnection()->query("SELECT * FROM tasks");
@@ -30,20 +41,6 @@ class Task
         $stmt = $db->getConnection()->prepare("SELECT * FROM tasks WHERE id = ?");
         $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
-    }
-
-    public function save(DatabaseManager $db)
-    {
-        $name = Security::sanitizeForDatabase($this->name, $db->getConnection());
-        $stmt = $db->getConnection()->prepare("INSERT INTO tasks (name, completed) VALUES ($name, ?)");
-        $stmt->execute([$this->completed]);
-    }
-
-    public function update(DatabaseManager $db)
-    {
-        $name = Security::sanitizeForDatabase($this->name, $db->getConnection());
-        $stmt = $db->getConnection()->prepare("UPDATE tasks SET name = $name, completed = ? WHERE id = ?");
-        $stmt->execute([$this->completed, $this->id]);
     }
 
     public static function destroy(DatabaseManager $db, $id)
