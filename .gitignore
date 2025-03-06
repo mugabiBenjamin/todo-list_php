@@ -1,8 +1,3 @@
-# Sensitive files
+/vendor/
+/composer.lock
 .env
-
-# Dependency files
-vendor/
-
-# Update_task file not necessary
-tasks/update_task.php 
