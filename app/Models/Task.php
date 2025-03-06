@@ -3,50 +3,52 @@
 namespace App\Models;
 
 use App\Database\DatabaseManager;
+use App\Helpers\Security; // Correct namespace here
 use PDO;
 
 class Task
 {
-    public static function getAllTasks()
+    public $id;
+    public $name;
+    public $completed;
+
+    public function __construct($id = null, $name = null, $completed = 0)
     {
-        $db = DatabaseManager::getConnection();
-        $stmt = $db->query("SELECT * FROM tasks ORDER BY id DESC");
+        $this->id = $id;
+        $this->name = $name;
+        $this->completed = $completed;
+    }
+
+    public static function all(DatabaseManager $db)
+    {
+        $stmt = $db->getConnection()->query("SELECT * FROM tasks");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public static function getTaskById($id)
+    public static function find(DatabaseManager $db, $id)
     {
-        $db = DatabaseManager::getConnection();
-        $stmt = $db->prepare("SELECT * FROM tasks WHERE id = :id");
-        $stmt->execute(['id' => $id]);
+        $stmt = $db->getConnection()->prepare("SELECT * FROM tasks WHERE id = ?");
+        $stmt->execute([$id]);
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public static function createTask($name)
+    public function save(DatabaseManager $db)
     {
-        $db = DatabaseManager::getConnection();
-        $stmt = $db->prepare("INSERT INTO tasks (name) VALUES (:name)");
-        $stmt->execute(['name' => $name]);
+        $name = Security::sanitizeForDatabase($this->name, $db->getConnection());
+        $stmt = $db->getConnection()->prepare("INSERT INTO tasks (name, completed) VALUES ($name, ?)");
+        $stmt->execute([$this->completed]);
     }
 
-    public static function updateTask($id, $name)
+    public function update(DatabaseManager $db)
     {
-        $db = DatabaseManager::getConnection();
-        $stmt = $db->prepare("UPDATE tasks SET name = :name WHERE id = :id");
-        $stmt->execute(['id' => $id, 'name' => $name]);
+        $name = Security::sanitizeForDatabase($this->name, $db->getConnection());
+        $stmt = $db->getConnection()->prepare("UPDATE tasks SET name = $name, completed = ? WHERE id = ?");
+        $stmt->execute([$this->completed, $this->id]);
     }
 
-    public static function deleteTask($id)
+    public static function destroy(DatabaseManager $db, $id)
     {
-        $db = DatabaseManager::getConnection();
-        $stmt = $db->prepare("DELETE FROM tasks WHERE id = :id");
-        $stmt->execute(['id' => $id]);
-    }
-
-    public static function toggleTask($id)
-    {
-        $db = DatabaseManager::getConnection();
-        $stmt = $db->prepare("UPDATE tasks SET completed = NOT completed WHERE id = :id");
-        $stmt->execute(['id' => $id]);
+        $stmt = $db->getConnection()->prepare("DELETE FROM tasks WHERE id = ?");
+        $stmt->execute([$id]);
     }
 }

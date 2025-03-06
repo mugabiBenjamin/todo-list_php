@@ -2,67 +2,56 @@
 
 namespace App\Controllers;
 
-use App\Helpers\Security;
 use App\Models\Task;
+use App\Database\DatabaseManager;
+use App\Helpers\Security;
 
 class TaskController
 {
+    private $db;
+
+    public function __construct(DatabaseManager $db)
+    {
+        $this->db = $db;
+    }
+
     public function index()
     {
-        $tasks = Task::getAllTasks();
-        include __DIR__ . '/../Views/Tasks/index.php';
+        $tasks = Task::all($this->db);
+        require_once __DIR__ . '/../Views/Tasks/index.php';
     }
 
     public function create()
     {
-        include __DIR__ . '/../Views/Tasks/create.php';
+        require_once __DIR__ . '/../Views/Tasks/create.php';
     }
 
-    public function store()
+    public function store($data)
     {
-        session_start();
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (!Security::verifyCsrfToken($_POST['csrf_token'])) {
-                die('CSRF token verification failed.');
-            }
-            $name = Security::sanitizeInput($_POST['name']);
-            Task::createTask($name);
-            header("Location: /tasks");
-            exit;
-        }
+        Security::verifyCsrfToken($data['csrf_token']);
+        $name = Security::sanitize($data['name']);
+        $task = new Task(null, $name, 0);
+        $task->save($this->db);
     }
 
     public function edit($id)
     {
-        $task = Task::getTaskById($id);
-        include __DIR__ . '/../Views/Tasks/edit.php';
+        $task = Task::find($this->db, $id);
+        require_once __DIR__ . '/../Views/Tasks/edit.php';
     }
 
-    public function update($id)
+    public function update($id, $data)
     {
-        session_start();
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            if (!Security::verifyCsrfToken($_POST['csrf_token'])) {
-                die('CSRF token verification failed.');
-            }
-            $name = Security::sanitizeInput($_POST['name']);
-            Task::updateTask($id, $name);
-            header("Location: /tasks");
-            exit;
-        }
+        Security::verifyCsrfToken($data['csrf_token']);
+        $name = Security::sanitize($data['name']);
+        $completed = isset($data['completed']) ? 1 : 0;
+        $task = new Task($id, $name, $completed);
+        $task->update($this->db);
     }
 
-    public function delete($id)
+    public function delete($id, $token)
     {
-        Task::deleteTask($id);
-        header("Location: /tasks");
-        exit;
-    }
-
-    public function toggle($id)
-    {
-        Task::toggleTask($id);
-        header("Location: /tasks");
-        exit;
+        Security::verifyCsrfToken($token);
+        Task::destroy($this->db, $id);
     }
 }

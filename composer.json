@@ -1,7 +1,4 @@
 {
-    "name": "your-username/todo-app",
-    "description": "A simple to-do list application",
-    "license": "MIT",
     "require": {
         "vlucas/phpdotenv": "^5.6"
     },

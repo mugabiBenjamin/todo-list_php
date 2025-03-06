@@ -2,18 +2,40 @@
 
 namespace App\Database;
 
-use App\Config\Database;
 use PDO;
+use PDOException;
 
 class DatabaseManager
 {
-    private static ?PDO $connection = null;
+    private $connection;
+    private $config;
 
-    public static function getConnection(): PDO
+    public function __construct(array $config)
     {
-        if (self::$connection === null) {
-            self::$connection = Database::getConnection();
+        $this->config = $config;
+        $this->connect();
+    }
+
+    private function connect()
+    {
+        try {
+            $dsn = "mysql:host={$this->config['host']};dbname={$this->config['database']}";
+            $this->connection = new PDO($dsn, $this->config['user'], $this->config['password']);
+            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch (PDOException $e) {
+            error_log("Database connection failed: " . $e->getMessage());
+            throw new \Exception("Database connection failed.");
         }
-        return self::$connection;
+    }
+
+    public function getConnection()
+    {
+        return $this->connection;
+    }
+
+    public function migrate()
+    {
+        require_once __DIR__ . '/Migrations/CreateTasksTable.php';
+        Migrations\CreateTasksTable::up($this);
     }
 }

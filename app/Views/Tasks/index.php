@@ -1,26 +1,51 @@
-<?php session_start(); ?>
+<?php
+use App\Helpers\Security;
+?>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Tasks</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do List</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 
 <body>
-    <h1>Tasks</h1>
-    <a href="/tasks/create">Create Task</a>
-    <ul>
-        <?php foreach ($tasks as $task): ?>
-        <li>
-            <input type="checkbox" <?php echo $task['completed'] ? 'checked' : ''; ?>
-                onclick="location.href='/tasks/toggle?id=<?php echo $task['id']; ?>'">
-            <span><?php echo htmlspecialchars($task['name']); ?></span>
-            <a href="/tasks/edit?id=<?php echo $task['id']; ?>">Edit</a>
-            <a href="/tasks/delete?id=<?php echo $task['id']; ?>">Delete</a>
-        </li>
-        <?php endforeach; ?>
-    </ul>
+    <div class="container">
+        <h2>My To-Do List</h2>
+        <a href="/create">Add New Task</a>
+        <?php if (empty($tasks)): ?>
+        <p>No tasks yet!</p>
+        <?php else: ?>
+        <ul>
+            <?php foreach ($tasks as $task): ?>
+            <li>
+                <span class="task-item <?php echo $task['completed'] ? 'completed' : ''; ?>">
+                    <?php echo htmlspecialchars($task['name']); ?>
+                </span>
+                <div class="task-actions">
+                    <form action="/update/<?php echo (int)$task['id']; ?>" method="POST" class="inline-form">
+                        <input type="hidden" name="csrf_token" value="<?php echo Security::generateCsrfToken(); ?>">
+                        <input type="hidden" name="name" value="<?php echo htmlspecialchars($task['name']); ?>">
+                        <input type="hidden" name="completed" value="<?php echo $task['completed'] ? '0' : '1'; ?>">
+                        <button type="submit" class="btn btn-small">
+                            <?php echo $task['completed'] ? 'Mark Incomplete' : 'Mark Complete'; ?>
+                        </button>
+                    </form>
+                    <a href="/edit/<?php echo (int)$task['id']; ?>" class="btn btn-small">Edit</a>
+                    <form action="/delete/<?php echo (int)$task['id']; ?>" method="POST"
+                        class="inline-form delete-form">
+                        <input type="hidden" name="csrf_token" value="<?php echo Security::generateCsrfToken(); ?>">
+                        <button type="submit" class="btn btn-small btn-danger"
+                            onclick="return confirm('Are you sure you want to delete this task?')">Delete</button>
+                    </form>
+                </div>
+            </li>
+            <?php endforeach; ?>
+        </ul>
+        <?php endif; ?>
+    </div>
 </body>
 
 </html>

@@ -2,28 +2,14 @@
 
 namespace App\Config;
 
-use PDO;
-use PDOException;
+use Dotenv\Dotenv;
 
-class Database
-{
-    public static function getConnection()
-    {
-        $dotenv = \Dotenv\Dotenv::createImmutable(dirname(__DIR__, 2));
-        $dotenv->load();
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../../');
+$dotenv->safeLoad();
 
-        $host = $_ENV['DB_HOST'];
-        $dbname = $_ENV['DB_NAME'];
-        $user = $_ENV['DB_USER'];
-        $pass = $_ENV['DB_PASS'];
-
-        try {
-            $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
-            $pdo = new PDO($dsn, $user, $pass);
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            return $pdo;
-        } catch (PDOException $e) {
-            die("Database connection failed: " . $e->getMessage());
-        }
-    }
-}
+return [
+'host' => $_ENV['DB_HOST'] ?? 'localhost',
+'user' => $_ENV['DB_USER'] ?? 'root',
+'password' => $_ENV['DB_PASS'] ?? '',
+'database' => $_ENV['DB_NAME'] ?? 'todo_app',
+];
