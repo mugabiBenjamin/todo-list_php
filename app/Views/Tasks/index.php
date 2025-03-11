@@ -12,7 +12,7 @@ use App\Helpers\Security;
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 
-<body>
+<body class="index-page">
     <div class="container-md">
         <h2>My To-Do List</h2>
         <a href="/create">Add New Task</a>
@@ -22,11 +22,11 @@ use App\Helpers\Security;
         <ul>
             <?php foreach ($tasks as $task): ?>
             <li>
-                <span class="task-item <?php echo $task['completed'] ? 'completed' : ''; ?>">
+                <div class="task-item <?php echo $task['completed'] ? 'completed' : ''; ?>">
                     <?php echo htmlspecialchars($task['name']); ?>
-                </span>
+                </div>
                 <div class="task-actions">
-                    <form action="/update/<?php echo (int)$task['id']; ?>" method="POST" class="inline-form">
+                    <form action="/update/<?php echo (int)$task['id']; ?>" method="POST">
                         <input type="hidden" name="csrf_token" value="<?php echo Security::generateCsrfToken(); ?>">
                         <input type="hidden" name="name" value="<?php echo htmlspecialchars($task['name']); ?>">
                         <input type="hidden" name="completed" value="<?php echo $task['completed'] ? '0' : '1'; ?>">
@@ -34,13 +34,14 @@ use App\Helpers\Security;
                             <?php echo $task['completed'] ? 'Mark Incomplete' : 'Mark Complete'; ?>
                         </button>
                     </form>
-                    <a href="/edit/<?php echo (int)$task['id']; ?>" class="btn btn-small">Edit</a>
-                    <form action="/delete/<?php echo (int)$task['id']; ?>" method="POST"
-                        class="inline-form delete-form">
-                        <input type="hidden" name="csrf_token" value="<?php echo Security::generateCsrfToken(); ?>">
-                        <button type="submit" class="btn btn-small btn-danger"
-                            onclick="return confirm('Are you sure you want to delete this task?')">Delete</button>
-                    </form>
+                    <div class="edit-delete">
+                        <a href="/edit/<?php echo (int)$task['id']; ?>">Edit</a>
+                        <form action="/delete/<?php echo (int)$task['id']; ?>" method="POST" class="delete-form">
+                            <input type="hidden" name="csrf_token" value="<?php echo Security::generateCsrfToken(); ?>">
+                            <button type="submit" class="btn-danger"
+                                onclick="return confirm('Are you sure you want to delete this task?')">Delete</button>
+                        </form>
+                    </div>
                 </div>
             </li>
             <?php endforeach; ?>
