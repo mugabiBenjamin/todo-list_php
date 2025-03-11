@@ -12,8 +12,8 @@ use App\Helpers\Security;
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 
-<body>
-    <div class="container">
+<body class="edit-page">
+    <div class="container-md">
         <h2>Edit Task</h2>
         <form action="/update/<?php echo (int)$task['id']; ?>" method="POST">
             <input type="hidden" name="csrf_token" value="<?php echo Security::generateCsrfToken(); ?>">
