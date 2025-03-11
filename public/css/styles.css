@@ -50,11 +50,16 @@ body {
     text-decoration: none;
     color: var(--background-hover);
     cursor: pointer;
+    font-weight: bold;
 }
 
 .container-md a:hover {
     color: var(--headings);
     transition: all 0.35s;
+}
+
+.container-md small {
+    color: var(--sublevel);
 }
 
 ul {
@@ -68,6 +73,11 @@ ul {
     margin-top: 20px;
 }
 
+.index-page .completed {
+    text-decoration: line-through;
+    color: rgb(155, 152, 152);
+}
+
 .index-page .task-actions button {
     outline: none;
     border: none;
@@ -79,6 +89,10 @@ ul {
     font-weight: bold;
 }
 
+.index-page .container-md .task-actions .btn-mark {
+    color: var(--sublevel);
+}
+
 .index-page .task-actions button:not(.btn-danger):hover {
     color: var(--headings);
     transition: all 0.35s;
@@ -88,6 +102,10 @@ ul {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
 }
 
 .index-page ul li .task-actions {
@@ -100,6 +118,10 @@ ul {
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+.index-page .edit-delete .edit-link {
+    color: var(--success);
 }
 
 .index-page ul li .btn-danger {
@@ -140,73 +162,39 @@ ul {
     background: var(--background-hover);
 }
 
+/* Edit.php page styles */
 
-
-
-
-
-
-
-/* Task list styling */
-
-ul li {
-    display: flex;
-    align-items: center;
+.edit-page input[type="text"] {
+    border: 1px solid var(--secondary-color);
+    outline: none;
+    background: var(--secondary-color);
+    border-radius: 8px;
+    padding: 15px;
+    font-size: 16px;
     width: 100%;
-    margin-top: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s, background-color 0.3s;
+    margin-bottom: 10px;
 }
 
-ul li .task {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
+.edit-page input[type="text"]:focus {
+    border: 1px solid var(--primary-color);
 }
 
-/* Form styling */
-/* .container-md form {
-    display: flex;
-    width: 100%;
-    margin-bottom: 40px;
-} */
-
-.messages {
-    padding: 50px 0;
-}
-
-.error,
-.success {
+.edit-page .container-md .btn-update {
+    margin: 0px 0px 20px 0px;
+    border: none;
+    outline: none;
+    background: var(--primary-color);
+    color: white;
+    font-size: 15px;
     font-weight: bold;
-    font-size: 20px;
-    animation: fadeOut 5s forwards;
-    transform: translate(-50%, -100%);
+    border-radius: 8px;
+    padding: 12px 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
 }
 
-.error {
-    color: red;
-}
-
-.success {
-    color: var(--success);
-}
-
-.success, .error {
-    animation:
-        slideIn 0.3s ease-out,
-        fadeOut 3s forwards;
-}
-
-.success.slide-in,
-.error.slide-in {
-    animation: slideIn 3s ease-out forwards;
-}
-
-.success.fade-out,
-.error.fade-out {
-    animation: fadeOut 3s ease-in forwards;
+.edit-page .container-md .btn-update:hover {
+    background: var(--background-hover);
 }
 
 /* Animations */
@@ -263,7 +251,53 @@ ul li .task {
     }
 }
 
-.task-checkbox {
+
+
+/* Form styling */
+/* .container-md form {
+    display: flex;
+    width: 100%;
+    margin-bottom: 40px;
+} */
+
+/* .messages {
+    padding: 50px 0;
+}
+
+.error,
+.success {
+    font-weight: bold;
+    font-size: 20px;
+    animation: fadeOut 5s forwards;
+    transform: translate(-50%, -100%);
+}
+
+.error {
+    color: red;
+}
+
+.success {
+    color: var(--success);
+}
+
+.success, .error {
+    animation:
+        slideIn 0.3s ease-out,
+        fadeOut 3s forwards;
+}
+
+.success.slide-in,
+.error.slide-in {
+    animation: slideIn 3s ease-out forwards;
+}
+
+.success.fade-out,
+.error.fade-out {
+    animation: fadeOut 3s ease-in forwards;
+} */
+
+
+/* .task-checkbox {
     appearance: none;
     width: 20px;
     height: 20px;
@@ -277,11 +311,6 @@ ul li .task {
     border: 5px solid var(--primary-color);
 }
 
-.completed {
-    text-decoration: line-through;
-    color: rgb(155, 152, 152);
-}
-
 .task-toggle {
     color: var(--text-color);
     text-decoration: none;
@@ -292,4 +321,4 @@ ul li .task {
     font-size: 18px;
     margin-right: 10px;
     color: var(--delete);
-}
+} */
