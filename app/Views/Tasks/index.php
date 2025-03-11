@@ -13,7 +13,7 @@ use App\Helpers\Security;
 </head>
 
 <body>
-    <div class="container">
+    <div class="container-md">
         <h2>My To-Do List</h2>
         <a href="/create">Add New Task</a>
         <?php if (empty($tasks)): ?>
