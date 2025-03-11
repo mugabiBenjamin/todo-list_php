@@ -30,13 +30,13 @@ use App\Helpers\Security;
                         <input type="hidden" name="csrf_token" value="<?php echo Security::generateCsrfToken(); ?>">
                         <input type="hidden" name="name" value="<?php echo htmlspecialchars($task['name']); ?>">
                         <input type="hidden" name="completed" value="<?php echo $task['completed'] ? '0' : '1'; ?>">
-                        <button type="submit" class="btn btn-small">
+                        <button type="submit" class="btn-mark">
                             <?php echo $task['completed'] ? 'Mark Incomplete' : 'Mark Complete'; ?>
                         </button>
                     </form>
                     <div class="edit-delete">
-                        <a href="/edit/<?php echo (int)$task['id']; ?>">Edit</a>
-                        <form action="/delete/<?php echo (int)$task['id']; ?>" method="POST" class="delete-form">
+                        <a href="/edit/<?php echo (int)$task['id']; ?>" class="edit-link">Edit</a>
+                        <form action="/delete/<?php echo (int)$task['id']; ?>" method="POST">
                             <input type="hidden" name="csrf_token" value="<?php echo Security::generateCsrfToken(); ?>">
                             <button type="submit" class="btn-danger"
                                 onclick="return confirm('Are you sure you want to delete this task?')">Delete</button>
