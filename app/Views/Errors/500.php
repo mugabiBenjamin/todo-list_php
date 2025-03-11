@@ -18,7 +18,7 @@
     }
 
     p {
-        color: #333;
+        color: rgb(51, 51, 51);
     }
 
     .container {
