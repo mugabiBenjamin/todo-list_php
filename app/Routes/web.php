@@ -49,7 +49,7 @@ try {
             echo "Invalid task ID format";
             exit;
         }
-        if(!isset($_POST['csrf_token'])){
+        if (!isset($_POST['csrf_token'])) {
             http_response_code(400);
             echo "Missing CSRF token";
             exit;
