@@ -1,185 +1,170 @@
-# PHP Todo List Application
+## To-Do List Application
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-
 [![PHP Version](https://img.shields.io/badge/PHP-7.4%2B-blue.svg)](https://www.php.net/downloads)
-
 [![MySQL](https://img.shields.io/badge/MySQL-5.7%2B-orange.svg)](https://www.mysql.com)
+[![Composer](https://img.shields.io/badge/Composer-2.0%2B-orange.svg)](https://getcomposer.org/)
 
-A robust and user-friendly Todo List application built with **PHP** and **MySQL**, featuring a responsive interface and secure task management capabilities.
+
+This is a simple To-Do List application built using PHP. The application allows users to create, update, delete, and mark tasks as completed. The project follows an MVC architecture and includes basic security features such as CSRF protection and input validation.
 
 ## Table of Contents
+
 1. [Features](#features)
-2. [Prerequisites](#prerequisites)
+2. [Technologies Used](#technologies-used)
 3. [Installation](#installation)
-4. [Usage](#usage)
-5. [Project Structure](#project-structure)
-6. [Security Features](#security-features)
-7. [Contributing](#contributing)
-8. [License](#license)
-9. [Authors](#authors)
+4. [Configuration](#configuration)
+5. [Usage](#usage)
+6. [Project Structure](#project-structure)
+7. [Routes](#routes)
+8. [Contributing](#contributing)
+9. [License](#license)
 10. [Acknowledgments](#acknowledgments)
 11. [Support](#support)
 
-## 🚀Features
+## Features
 
-- **Task Management**
-  - Create and add new tasks
-  - Mark tasks as complete/incomplete
-  - Delete unnecessary tasks
-  - Real-time status updates
-  
-- **Security**
-  - CSRF protection
-  - Input sanitization
-  - SQL injection prevention
-  - XSS attack prevention
+- Add new tasks
+- Edit existing tasks
+- Mark tasks as completed or incomplete
+- Delete tasks
+- Secure input handling
+- CSRF protection
 
-- **User Experience**
-  - Responsive design
-  - Intuitive interface
-  - Animated notifications
-  - Real-time updates
+## Technologies Used
 
-## 📋Prerequisites
+- [PHP](https://www.php.net/downloads) (Core, OOP)
+- [MySQL](https://www.mysql.com/downloads/) (Database)
+- [Composer](https://getcomposer.org/download/) (Dependency Management)
+- HTML/CSS (Frontend)
+- [Apache](https://httpd.apache.org/download.cgi) or [Nginx](https://nginx.org/en/download.html) (Server)
 
-Before you begin, ensure you have the following installed on your system:
+## Installation
 
-- [PHP](https://www.php.net/downloads) (version 7.4 or higher)
-- [MySQL](https://www.mysql.com/downloads/) (version 5.7 or higher)
-- [Apache](https://httpd.apache.org/download.cgi) or [Nginx](https://nginx.org/en/download.html) web server
-- [Composer](https://getcomposer.org/download/) (optional, for dependency management)
-- Web browser (Chrome, Firefox, Safari, or Edge)
-
-## 🛠Installation
-
-1. **Clone the Repository**
+1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/mugabiBenjamin/todo-list_php.git
-   cd todo-list_php
+   git clone https://github.com/yourusername/todo-list-php.git
+   cd todo-list-php
    ```
 
-2. **Install dependencies**
+2. **Install dependencies:**
+
    ```bash
    composer install
    ```
 
-3. **Configure environment variables**
+3. **Set up the environment file:**
+
    ```bash
-   cp config.env.example .env
+   cp .env.example .env
    ```
-   Edit `.env` with your database credentials:
+
+4. **Configure database settings in .env:**
+
    ```env
    DB_HOST=localhost
-   DB_USERNAME=your_username
-   DB_PASSWORD=your_password
-   DB_NAME=your_database_name
+   DB_USER=your_db_user
+   DB_PASS=your_db_password
+   DB_NAME=your_db_name
    ```
 
-4. **Set Up the Database**
-   - Create a new database (e.g., `todo_list`).
-   - Import the provided SQL file into the database:
-     ```bash
-     mysql -u [username] -p [database_name] < database/todo.sql
-     ```
+5. **Run database migrations:**
 
-5. **Configure web server**
-   - For Apache: Ensure mod_rewrite is enabled
-   - For Nginx: Configure URL rewriting
-
-6. **Run the Application**
-   - Start your web server.
-   - Place the project folder in the server's root directory (e.g., `htdocs` for XAMPP or `www` for WAMP).
-   - Access the application via `http://localhost/todo-list_php` in your browser.
-
-## 💻Usage
-
-1. Access the application through your web browser:
-   ```
-   http://localhost/todo-list_php
+   ```php
+   php -r "require 'app/Database/DatabaseManager.php'; (new App\Database\DatabaseManager(require 'app/Config/Database.php'))->migrate();"
    ```
 
-2. Add tasks using the input field at the top
-3. Click the checkbox to mark tasks as complete
-4. Use the trash icon to delete tasks
-5. Tasks are automatically saved to the database
+6. **Start the PHP development server:**
 
-## 🔧Project Structure
+   ```php
+   php -S localhost:8000 -t public
+   ```
+
+   The application will now be accessible at `http://localhost:8000`
+
+## Configuration
+
+- Update database credentials in `.env`
+- Modify `app/Config/Database.php` if needed
+- Modify front-end styles in `public/css/styles.css`
+
+## Usage
+
+1. Open `http://localhost:8000` in your browser.
+2. Click `Add New Task` to create a task.
+3. Use the `Edit` button to modify a task.
+4. Mark tasks as complete/incomplete using the provided button.
+5. Delete tasks if no longer needed.
+
+## Project Structure
 
 ```
-└── todo-list_php/
-   ├── README.md                       # Project documentation
-   ├── LICENSE                         # License information
-   ├── composer.json                   # Composer dependencies and scripts
-   ├── composer.lock                   # Locked versions of dependencies
-   ├── .env.example                    # Example environment configuration file
-   ├── config.php                      # Database connection setup
-   ├── index.php                       # Main entry point of the application
-   ├── css/ 
-   │   └── todo.css                    # Stylesheet for the application
-   ├── database/  
-   │   └── todo.sql                    # SQL file to set up the database schema
-   └── tasks/  
-      ├── add.php                      # Script to add a new task
-      ├── delete.php                   # Script to delete a task
-      ├── fetch.php                    # Script to fetch tasks from the database
-      ├── validation.php               # Script to validate task input
-      └── toggle.php                   # Script to toggle task completion status
+├── app/
+│   ├── Config/         # Configuration files
+│   ├── Controllers/    # Handles application logic
+│   ├── Database/       # Database management
+│   ├── Helpers/        # Security and utilities
+│   ├── Models/         # Database models
+│   ├── Routes/         # Application routes
+│   └── Views/          # Frontend templates
+├── public/             # Public assets (CSS, index.php)
+├── .env.example        # Environment variables template
+├── composer.json       # Composer dependencies
+├── README.md           # Documentation
+└── LICENSE             # License information
 ```
 
-## 🔒Security Features
+## Routes
 
-- CSRF token validation for forms
-- Input sanitization and validation
-- Prepared SQL statements
-- XSS prevention through HTML escaping
+| Method | Route          | Description               |
+| ------ | -------------- | ------------------------- |
+| GET    | `/`            | Display list of tasks     |
+| GET    | `/create`      | Show task creation form   |
+| POST   | `/tasks`       | Store new task            |
+| GET    | `/edit/{id}`   | Show edit form for a task |
+| POST   | `/update/{id}` | Update a task             |
+| POST   | `/delete/{id}` | Delete a task             |
 
-## 🤝Contributing
+## Contributing
 
 Contributions are welcome! If you'd like to improve this project:
 
-1. Fork the repository.
+1. **Fork the repository.**
 
-2. Create a feature branch:
+2. **Create a feature branch:**
    ```bash
    git checkout -b feature/feature-name
    ```
-3. Commit your changes:
+3. **Commit your changes:**
    ```bash
    git commit -m 'Add a meaningful message'
    ```
-4. Push to the branch:
+4. **Push to the branch:**
    ```bash
    git push origin feature/feature-name
    ```
-5. Open a Pull Request.
+5. **Open a Pull Request.**
 
-## 📝License
+## License
 
-- This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
+This project is licensed under the MIT License. See [LICENSE](./LICENSE) for details.
 
-## 👥Authors
-
-- **Mugabi Benjamin**
-  - GitHub: [@mugabiBenjamin](https://github.com/mugabiBenjamin)
-  - LinkedIn: [Mugabi Benjamin](https://www.linkedin.com/in/mugabi-benjamin-156603224/)
-  - Email: mugabiben6@gmail.com
-
-## 🙏Acknowledgments
+## Acknowledgments
 
 All contributors who have helped improve this project
+
 - [PHP Documentation](https://www.php.net/docs.php)
 - [MySQL Documentation](https://dev.mysql.com/doc/)
+- [Composer Documenation](https://getcomposer.org/doc/)
 - [Bootstrap Icons](https://icons.getbootstrap.com/)
 
-## 📞Support
+## Support
 
 For support and queries:
+
 - Create an [Issue](https://github.com/mugabiBenjamin/todo-list_php/issues)
-- Email: mugabiben6@gmail.com
-- LinkedIn: [Mugabi Benjamin](https://www.linkedin.com/in/mugabi-benjamin-156603224/)
 
 ⭐ Star this repository if you find it helpful!
 
-[Back to Top](#php-todo-list-application)
+[🔝 Back to Top](#to-do-list-application)
