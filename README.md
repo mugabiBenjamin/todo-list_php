@@ -1,10 +1,9 @@
-## To-Do List Application
+# To-Do List Application
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 [![PHP Version](https://img.shields.io/badge/PHP-7.4%2B-blue.svg)](https://www.php.net/downloads)
 [![MySQL](https://img.shields.io/badge/MySQL-5.7%2B-orange.svg)](https://www.mysql.com)
 [![Composer](https://img.shields.io/badge/Composer-2.0%2B-orange.svg)](https://getcomposer.org/)
-
 
 This is a simple To-Do List application built using PHP. The application allows users to create, update, delete, and mark tasks as completed. The project follows an MVC architecture and includes basic security features such as CSRF protection and input validation.
 
@@ -99,7 +98,7 @@ This is a simple To-Do List application built using PHP. The application allows 
 
 ## Project Structure
 
-```
+```plaintext
 ├── app/
 │   ├── Config/         # Configuration files
 │   ├── Controllers/    # Handles application logic
@@ -133,17 +132,23 @@ Contributions are welcome! If you'd like to improve this project:
 1. **Fork the repository.**
 
 2. **Create a feature branch:**
+
    ```bash
    git checkout -b feature/feature-name
    ```
+
 3. **Commit your changes:**
+
    ```bash
    git commit -m 'Add a meaningful message'
    ```
+
 4. **Push to the branch:**
+
    ```bash
    git push origin feature/feature-name
    ```
+
 5. **Open a Pull Request.**
 
 ## License
