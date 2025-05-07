@@ -1,200 +1,240 @@
 :root {
-    --text-color: black;
-    --primary-color: rgb(0, 204, 255);
-    --secondary-color: rgb(231, 231, 231);
-    --background-hover: rgb(3, 134, 167);
-    --success: rgb(2, 184, 2);
-    --delete: red;
-    --headings: rgb(76, 74, 74);
-    --sublevel: gray;
+    --text-color: oklch(0% 0 0);
+    --primary-color: oklch(70% 0.25 220);
+    --secondary-color: oklch(90% 0.02 220);
+    --background-hover: oklch(50% 0.2 220);
+    --success: oklch(60% 0.25 145);
+    --delete: oklch(60% 0.3 30);
+    --headings: oklch(30% 0.05 220);
+    --sublevel: oklch(60% 0.05 220);
+
+    --space-xs: clamp(0.5rem, 0.25rem + 0.5vw, 0.75rem);
+    --space-sm: clamp(0.75rem, 0.5rem + 0.5vw, 1rem);
+    --space-md: clamp(1rem, 0.75rem + 0.5vw, 1.5rem);
+    --space-lg: clamp(1.5rem, 1rem + 1vw, 2rem);
+    --space-xl: clamp(2rem, 1.5rem + 1vw, 3rem);
+
+    --text-sm: clamp(0.875rem, 0.825rem + 0.1vw, 0.9375rem);
+    --text-base: clamp(1rem, 0.925rem + 0.15vw, 1.125rem);
+    --text-lg: clamp(1.125rem, 1.025rem + 0.2vw, 1.25rem);
+    --text-xl: clamp(1.25rem, 1.125rem + 0.3vw, 1.5rem);
+    --text-2xl: clamp(1.5rem, 1.3rem + 0.5vw, 2rem);
 }
 
-/* rest and base styles*/
+/* Base styles with nesting */
 *,
-::before, ::after {
+::before,
+::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+
+    &:focus-visible {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 2px;
+    }
 }
 
-/* Body and containers*/
 body {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    display: grid;
+    place-items: center;
+    block-size: 100vh;
     text-align: center;
-    background-image: linear-gradient(-45deg, lightblue, lightcoral);
+    background-image: linear-gradient(-45deg, oklch(90% 0.1 220), oklch(90% 0.1 30));
     background-size: 150% 150%;
     animation: moveGradient 5s ease-in-out infinite alternate;
     transition: all 0.3s;
+    padding-inline: var(--space-md);
 }
 
+/* Container styles with nesting */
 .container-md {
-    width: 500px;
+    inline-size: min(500px, 90vw);
     background: white;
     border-radius: 10px;
-    padding: 20px 40px;
-    box-shadow: 1px 2px 20px rgba(0, 0, 0, 0.3);
-}
+    padding: var(--space-lg) var(--space-xl);
+    box-shadow: 1px 2px 20px oklch(0% 0 0 / 0.3);
 
-.container-md h2 {
-    color: var(--headings);
-    margin: 10px 0 40px;
-    text-align: center;
-}
+    & h2 {
+        color: var(--headings);
+        margin-block: var(--space-sm) var(--space-xl);
+        text-align: center;
+        font-size: var(--text-2xl);
+    }
 
-.container-md a {
-    text-decoration: none;
-    color: var(--background-hover);
-    cursor: pointer;
-    font-weight: bold;
-}
+    & a {
+        text-decoration: none;
+        color: var(--background-hover);
+        cursor: pointer;
+        font-weight: bold;
 
-.container-md a:hover {
-    color: var(--headings);
-    transition: all 0.35s;
-}
+        &:hover {
+            color: var(--headings);
+            transition: all 0.35s;
+        }
+    }
 
-.container-md small {
-    color: var(--sublevel);
+    & small {
+        color: var(--sublevel);
+        font-size: var(--text-sm);
+    }
 }
 
 ul {
     list-style: none;
 }
 
-/* Index.php page styles */
+/* Index page styles with nesting */
+.index-page {
+    & .container-md {
+        & p {
+            color: var(--sublevel);
+            margin-block-start: var(--space-md);
+        }
 
-.index-page .container-md p {
-    color: var(--sublevel);
-    margin-top: 20px;
+        & .completed {
+            text-decoration: line-through;
+            color: oklch(70% 0.05 220);
+        }
+
+        & .task-actions {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+
+            & button {
+                outline: none;
+                border: none;
+                background: none;
+                color: var(--background-hover);
+                font-size: var(--text-base);
+                cursor: pointer;
+                transition: all 0.35s;
+                font-weight: bold;
+                padding: var(--space-xs);
+
+                &:not(.btn-danger):hover {
+                    color: var(--headings);
+                }
+            }
+
+            & .btn-mark {
+                color: var(--sublevel);
+            }
+        }
+    }
+
+    & ul {
+        & li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            inline-size: 100%;
+            margin-block-start: var(--space-sm);
+            padding-block-end: var(--space-sm);
+            border-block-end: 1px solid oklch(0% 0 0 / 0.1);
+
+            & .edit-delete {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: var(--space-sm);
+
+                & .edit-link {
+                    color: var(--success);
+                }
+
+                & .btn-danger {
+                    color: var(--delete);
+                }
+            }
+        }
+    }
 }
 
-.index-page .completed {
-    text-decoration: line-through;
-    color: rgb(155, 152, 152);
+/* Create page styles with nesting */
+.create-page {
+    & input[type="text"] {
+        border: 1px solid var(--secondary-color);
+        outline: none;
+        background: var(--secondary-color);
+        border-radius: 8px;
+        padding: var(--space-md);
+        font-size: var(--text-base);
+        inline-size: 100%;
+        margin-block-end: var(--space-sm);
+
+        &:focus {
+            border: 1px solid var(--primary-color);
+        }
+    }
+
+    & button {
+        margin: var(--space-sm);
+        border: none;
+        outline: none;
+        background: var(--primary-color);
+        color: white;
+        font-size: var(--text-base);
+        font-weight: bold;
+        border-radius: 8px;
+        padding: var(--space-sm) var(--space-lg);
+        cursor: pointer;
+        transition: background-color 0.3s ease-in-out;
+
+        &:hover {
+            background-color: var(--background-hover);
+        }
+
+        &:focus-visible {
+            outline: 2px solid oklch(0% 0 0);
+            outline-offset: 2px;
+        }
+    }
 }
 
-.index-page .task-actions button {
-    outline: none;
-    border: none;
-    background: none;
-    color: var(--background-hover);
-    font-size: 16px;
-    cursor: pointer;
-    transition: all 0.35s;
-    font-weight: bold;
-}
+/* Edit page styles with nesting */
+.edit-page {
+    & input[type="text"] {
+        border: 1px solid var(--secondary-color);
+        outline: none;
+        background: var(--secondary-color);
+        border-radius: 8px;
+        padding: var(--space-md);
+        font-size: var(--text-base);
+        inline-size: 100%;
+        margin-block-end: var(--space-sm);
 
-.index-page .container-md .task-actions .btn-mark {
-    color: var(--sublevel);
-}
+        &:focus {
+            border: 1px solid var(--primary-color);
+        }
+    }
 
-.index-page .task-actions button:not(.btn-danger):hover {
-    color: var(--headings);
-    transition: all 0.35s;
-}
+    & .container-md {
+        & .btn-update {
+            margin-block-end: var(--space-md);
+            border: none;
+            outline: none;
+            background: var(--primary-color);
+            color: white;
+            font-size: var(--text-base);
+            font-weight: bold;
+            border-radius: 8px;
+            padding: var(--space-sm) var(--space-lg);
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
 
-.index-page ul li {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-    margin-top: 10px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-}
+            &:hover {
+                background-color: var(--background-hover);
+            }
 
-.index-page ul li .task-actions {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.index-page ul li .edit-delete {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.index-page .edit-delete .edit-link {
-    color: var(--success);
-}
-
-.index-page ul li .btn-danger {
-    color: var(--delete);
-}
-
-/* Create.php page styles */
-
-.create-page input[type="text"] {
-    border: 1px solid var(--secondary-color);
-    outline: none;
-    background: var(--secondary-color);
-    border-radius: 8px;
-    padding: 15px;
-    font-size: 16px;
-    width: 100%;
-}
-
-.create-page input[type="text"]:focus {
-    border: 1px solid var(--primary-color);
-}
-
-.create-page button {
-    margin: 10px;
-    border: none;
-    outline: none;
-    background: var(--primary-color);
-    color: white;
-    font-size: 15px;
-    font-weight: bold;
-    border-radius: 8px;
-    padding: 12px 30px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-}
-
-.create-page button:hover {
-    background: var(--background-hover);
-}
-
-/* Edit.php page styles */
-
-.edit-page input[type="text"] {
-    border: 1px solid var(--secondary-color);
-    outline: none;
-    background: var(--secondary-color);
-    border-radius: 8px;
-    padding: 15px;
-    font-size: 16px;
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-.edit-page input[type="text"]:focus {
-    border: 1px solid var(--primary-color);
-}
-
-.edit-page .container-md .btn-update {
-    margin: 0px 0px 20px 0px;
-    border: none;
-    outline: none;
-    background: var(--primary-color);
-    color: white;
-    font-size: 15px;
-    font-weight: bold;
-    border-radius: 8px;
-    padding: 12px 30px;
-    cursor: pointer;
-    transition: background-color 0.3s ease-in-out;
-}
-
-.edit-page .container-md .btn-update:hover {
-    background: var(--background-hover);
+            &:focus-visible {
+                outline: 2px solid oklch(0% 0 0);
+                outline-offset: 2px;
+            }
+        }
+    }
 }
 
 /* Animations */
@@ -230,95 +270,22 @@ ul {
 
 @keyframes moveGradient {
     0% {
-        background-image: linear-gradient(45deg, #add8e6, #f08080);
-        background-size: 150% 150%;
+        background-image: linear-gradient(45deg, oklch(90% 0.1 220), oklch(90% 0.1 30));
     }
 
     25% {
-        background-image: linear-gradient(135deg, #fffacd, #87ceeb);
+        background-image: linear-gradient(135deg, oklch(95% 0.1 90), oklch(90% 0.1 220));
     }
 
     50% {
-        background-image: linear-gradient(225deg, #ffb6c1, #fafad2);
+        background-image: linear-gradient(225deg, oklch(95% 0.1 30), oklch(95% 0.1 90));
     }
 
     75% {
-        background-image: linear-gradient(315deg, #90ee90, #b0c4de);
+        background-image: linear-gradient(315deg, oklch(80% 0.2 145), oklch(90% 0.1 220));
     }
 
     100% {
-        background-image: linear-gradient(45deg, #add8e6, #f08080);
+        background-image: linear-gradient(45deg, oklch(90% 0.1 220), oklch(90% 0.1 30));
     }
 }
-
-
-
-/* Form styling */
-/* .container-md form {
-    display: flex;
-    width: 100%;
-    margin-bottom: 40px;
-} */
-
-/* .messages {
-    padding: 50px 0;
-}
-
-.error,
-.success {
-    font-weight: bold;
-    font-size: 20px;
-    animation: fadeOut 5s forwards;
-    transform: translate(-50%, -100%);
-}
-
-.error {
-    color: red;
-}
-
-.success {
-    color: var(--success);
-}
-
-.success, .error {
-    animation:
-        slideIn 0.3s ease-out,
-        fadeOut 3s forwards;
-}
-
-.success.slide-in,
-.error.slide-in {
-    animation: slideIn 3s ease-out forwards;
-}
-
-.success.fade-out,
-.error.fade-out {
-    animation: fadeOut 3s ease-in forwards;
-} */
-
-
-/* .task-checkbox {
-    appearance: none;
-    width: 20px;
-    height: 20px;
-    margin: 0 20px 0 10px;
-    border-radius: 50%;
-    border: 1px solid rgba(0, 0, 0, 0.4);
-    cursor: pointer;
-}
-
-.task-checkbox:checked {
-    border: 5px solid var(--primary-color);
-}
-
-.task-toggle {
-    color: var(--text-color);
-    text-decoration: none;
-}
-
-.delete-icon a i {
-    cursor: pointer;
-    font-size: 18px;
-    margin-right: 10px;
-    color: var(--delete);
-} */
