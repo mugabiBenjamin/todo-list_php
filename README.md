@@ -127,29 +127,7 @@ This is a simple To-Do List application built using PHP. The application allows 
 
 ## Contributing
 
-Contributions are welcome! If you'd like to improve this project:
-
-1. **Fork the repository.**
-
-2. **Create a feature branch:**
-
-   ```bash
-   git checkout -b feature/feature-name
-   ```
-
-3. **Commit your changes:**
-
-   ```bash
-   git commit -m 'Add a meaningful message'
-   ```
-
-4. **Push to the branch:**
-
-   ```bash
-   git push origin feature/feature-name
-   ```
-
-5. **Open a Pull Request.**
+Contributions are welcome! If you'd like to improve this project
 
 ## License
 
