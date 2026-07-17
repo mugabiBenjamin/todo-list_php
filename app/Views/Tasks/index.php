@@ -17,9 +17,9 @@ $csrf = new CsrfGuard();
 <body class="index-page">
     <div class="container-md">
         <h2>My To-Do List</h2>
-        <a href="/create">Add New Task</a>
+        <a href="/create">+ Add New Task</a>
         <?php if (empty($tasks)): ?>
-            <p>No tasks yet!</p>
+            <p>No tasks yet. Add one above to get started.</p>
         <?php else: ?>
             <ul>
                 <?php foreach ($tasks as $task): ?>
@@ -40,8 +40,7 @@ $csrf = new CsrfGuard();
                                 <a href="/edit/<?php echo (int) $task->id; ?>" class="edit-link">Edit</a>
                                 <form action="/delete/<?php echo (int) $task->id; ?>" method="POST">
                                     <input type="hidden" name="csrf_token" value="<?php echo $csrf->generateToken(); ?>">
-                                    <button type="submit" class="btn-danger"
-                                        onclick="return confirm('Are you sure you want to delete this task?')">
+                                    <button type="submit" class="btn-danger" onclick="return confirm('Delete this task?')">
                                         Delete
                                     </button>
                                 </form>
