@@ -1,42 +1,48 @@
 # To-Do List Application
 
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-[![PHP Version](https://img.shields.io/badge/PHP-7.4%2B-blue.svg)](https://www.php.net/downloads)
-[![MySQL](https://img.shields.io/badge/MySQL-5.7%2B-orange.svg)](https://www.mysql.com)
+[![PHP Version](https://img.shields.io/badge/PHP-8.2%2B-blue.svg)](https://www.php.net/downloads)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15%2B-336791.svg)](https://www.postgresql.org/)
 [![Composer](https://img.shields.io/badge/Composer-2.0%2B-orange.svg)](https://getcomposer.org/)
 
-This is a simple To-Do List application built using PHP. The application allows users to create, update, delete, and mark tasks as completed. The project follows an MVC architecture and includes basic security features such as CSRF protection and input validation.
+A lightweight To-Do List application built with vanilla PHP 8.2+, following an MVC-inspired architecture. Backed by PostgreSQL (compatible with [Neon](https://neon.tech) serverless Postgres) and secured with CSRF protection, rate limiting, input sanitization, and strict HTTP security headers.
 
 ## Table of Contents
 
-1. [Features](#features)
-2. [Technologies Used](#technologies-used)
-3. [Installation](#installation)
-4. [Configuration](#configuration)
-5. [Usage](#usage)
-6. [Project Structure](#project-structure)
-7. [Routes](#routes)
-8. [Contributing](#contributing)
-9. [License](#license)
-10. [Acknowledgments](#acknowledgments)
-11. [Support](#support)
+- [To-Do List Application](#to-do-list-application)
+  - [Table of Contents](#table-of-contents)
+  - [Features](#features)
+  - [Technologies Used](#technologies-used)
+  - [Installation](#installation)
+  - [Configuration](#configuration)
+  - [Usage](#usage)
+  - [Project Structure](#project-structure)
+  - [Routes](#routes)
+  - [Security](#security)
+  - [Contributing](#contributing)
+  - [License](#license)
 
 ## Features
 
-- Add new tasks
-- Edit existing tasks
-- Mark tasks as completed or incomplete
-- Delete tasks
-- Secure input handling
-- CSRF protection
+- Create, edit, and delete tasks
+- Mark tasks as complete or incomplete
+- CSRF protection on all state-changing requests
+- Rate limiting on task creation (10 requests / 60 s)
+- Input sanitization and server-side validation
+- Secure session configuration (HttpOnly, SameSite Strict, Secure)
+- HTTP security headers (CSP, HSTS, X-Frame-Options, etc.)
+- Automatic database migration on startup
 
 ## Technologies Used
 
-- [PHP](https://www.php.net/downloads) (Core, OOP)
-- [MySQL](https://www.mysql.com/downloads/) (Database)
-- [Composer](https://getcomposer.org/download/) (Dependency Management)
-- HTML/CSS (Frontend)
-- [Apache](https://httpd.apache.org/download.cgi) or [Nginx](https://nginx.org/en/download.html) (Server)
+| Layer       | Technology                                                     |
+| ----------- | -------------------------------------------------------------- |
+| Language    | [PHP 8.2+](https://www.php.net/)                               |
+| Database    | [PostgreSQL](https://www.postgresql.org/) via PDO              |
+| Hosting     | [Neon](https://neon.tech) (serverless Postgres) or self-hosted |
+| Deps        | [Composer](https://getcomposer.org/) + `vlucas/phpdotenv`      |
+| Frontend    | Plain HTML/CSS (no framework, no JS)                           |
+| Dev server  | PHP built-in server                                            |
 
 ## Installation
 
@@ -59,95 +65,92 @@ This is a simple To-Do List application built using PHP. The application allows 
    cp .env.example .env
    ```
 
-4. **Configure database settings in .env:**
+4. **Configure your database in `.env`** (see [Configuration](#configuration)).
 
-   ```env
-   DB_HOST=localhost
-   DB_USER=your_db_user
-   DB_PASS=your_db_password
-   DB_NAME=your_db_name
-   ```
+5. **Start the development server:**
 
-5. **Run database migrations:**
-
-   ```php
-   php -r "require 'app/Database/DatabaseManager.php'; (new App\Database\DatabaseManager(require 'app/Config/Database.php'))->migrate();"
-   ```
-
-6. **Start the PHP development server:**
-
-   ```php
+   ```bash
    php -S localhost:8000 -t public
    ```
 
-   The application will now be accessible at `http://localhost:8000`
+   The app will be available at `http://localhost:8000`.
+
+   > The `tasks` table is created automatically on first request via `CreateTasksTable::up()` — no manual migration step needed.
 
 ## Configuration
 
-- Update database credentials in `.env`
-- Modify `app/Config/Database.php` if needed
-- Modify front-end styles in `public/css/styles.css`
+Edit `.env` with your PostgreSQL credentials:
+
+```env
+DB_HOST=your-project.region.aws.neon.tech
+DB_PORT=5432
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_NAME=your_db_name
+```
+
+The app connects over SSL (`sslmode=require`) by default, which is required for Neon and recommended for any remote Postgres instance. To use a local Postgres instance without SSL, update the DSN in `app/Database/DatabaseManager.php`.
 
 ## Usage
 
 1. Open `http://localhost:8000` in your browser.
-2. Click `Add New Task` to create a task.
-3. Use the `Edit` button to modify a task.
-4. Mark tasks as complete/incomplete using the provided button.
-5. Delete tasks if no longer needed.
+2. Click **+ Add New Task** to create a task (3–255 characters).
+3. Use **Edit** to modify a task's name or completion status.
+4. Toggle completion inline with **Mark Complete / Mark Incomplete**.
+5. **Delete** a task with confirmation prompt.
 
 ## Project Structure
 
 ```plaintext
-├── app/
-│   ├── Config/         # Configuration files
-│   ├── Controllers/    # Handles application logic
-│   ├── Database/       # Database management
-│   ├── Helpers/        # Security and utilities
-│   ├── Models/         # Database models
-│   ├── Routes/         # Application routes
-│   └── Views/          # Frontend templates
-├── public/             # Public assets (CSS, index.php)
-├── .env.example        # Environment variables template
-├── composer.json       # Composer dependencies
-├── README.md           # Documentation
-└── LICENSE             # License information
+.
+├── app
+│   ├── Config
+│   ├── Controllers
+│   ├── Database
+│   │   └── Migrations
+│   ├── Helpers
+│   ├── Interfaces
+│   ├── Models
+│   ├── Repositories
+│   ├── Routes
+│   ├── Validators
+│   └── Views
+│       ├── Errors
+│       └── Tasks
+└── public
+    └── css
 ```
 
 ## Routes
 
-| Method | Route          | Description               |
-| ------ | -------------- | ------------------------- |
-| GET    | `/`            | Display list of tasks     |
-| GET    | `/create`      | Show task creation form   |
-| POST   | `/tasks`       | Store new task            |
-| GET    | `/edit/{id}`   | Show edit form for a task |
-| POST   | `/update/{id}` | Update a task             |
-| POST   | `/delete/{id}` | Delete a task             |
+| Method | Route            | Description                      |
+| ------ | ---------------- | -------------------------------- |
+| GET    | `/`              | Display all tasks                |
+| GET    | `/create`        | Show task creation form          |
+| POST   | `/tasks`         | Store a new task                 |
+| GET    | `/edit/{id}`     | Show edit form for a task        |
+| POST   | `/update/{id}`   | Update task name / status        |
+| POST   | `/delete/{id}`   | Delete a task                    |
+
+## Security
+
+| Measure                  | Implementation                                         |
+| ------------------------ | ------------------------------------------------------ |
+| CSRF protection          | `CsrfGuard` — token per session, `hash_equals` verify  |
+| Input sanitization       | `InputSanitizer` — trim, strip_tags, htmlspecialchars  |
+| Rate limiting            | `RateLimiter` — session-based, 10 req/60 s on create   |
+| Password hashing         | `PasswordHasher` — Argon2id with tuned cost params     |
+| Prepared statements      | All queries via PDO with `ATTR_EMULATE_PREPARES=false` |
+| Secure session config    | HttpOnly, SameSite=Strict, Secure, 1 h lifetime        |
+| HTTP security headers    | CSP, HSTS, X-Frame-Options, X-Content-Type-Options     |
+| Error suppression        | `display_errors=0`; errors logged, not exposed         |
 
 ## Contributing
 
-Contributions are welcome! If you'd like to improve this project
+Contributions are welcome. Please open an issue before submitting a pull request for significant changes.
 
 ## License
 
 This project is licensed under the MIT License. See [LICENSE](./LICENSE) for details.
 
-## Acknowledgments
-
-All contributors who have helped improve this project
-
-- [PHP Documentation](https://www.php.net/docs.php)
-- [MySQL Documentation](https://dev.mysql.com/doc/)
-- [Composer Documenation](https://getcomposer.org/doc/)
-- [Bootstrap Icons](https://icons.getbootstrap.com/)
-
-## Support
-
-For support and queries:
-
-- Create an [Issue](https://github.com/mugabiBenjamin/todo-list_php/issues)
-
-⭐ Star this repository if you find it helpful!
-
-[🔝 Back to Top](#to-do-list-application)
+[Back to Top](#to-do-list-application)
