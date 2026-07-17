@@ -2,67 +2,38 @@
 
 use App\Controllers\TaskController;
 use App\Database\DatabaseManager;
-use App\Helpers\Security;
+use App\Database\Migrations\CreateTasksTable;
+use App\Helpers\CsrfGuard;
+use App\Helpers\InputSanitizer;
+use App\Helpers\RateLimiter;
+use App\Repositories\PdoTaskRepository;
+use App\Routes\Router;
+use App\Validators\TaskValidator;
+use App\Config\Database;
 
-// Load database configuration
-$config = require __DIR__ . '/../Config/Database.php';
+$db         = new DatabaseManager(Database::config());
+$migration  = new CreateTasksTable($db);
+$migration->up();
 
-try {
-    // Initialize database connection
-    $db = new DatabaseManager($config);
-    $controller = new TaskController($db);
+$repository = new PdoTaskRepository($db);
+$controller = new TaskController(
+    repository:  $repository,
+    csrf:        new CsrfGuard(),
+    sanitizer:   new InputSanitizer(),
+    rateLimiter: new RateLimiter(),
+    validator:   new TaskValidator(),
+);
 
-    // Parse the request
-    $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-    $method = $_SERVER['REQUEST_METHOD'];
+$router = new Router();
 
-    if ($uri === '/' && $method === 'GET') {
-        $controller->index();
-    } elseif ($uri === '/create' && $method === 'GET') {
-        $controller->create();
-    } elseif ($uri === '/tasks' && $method === 'POST') {
-        $controller->store($_POST);
-        header('Location: /');
-        exit;
-    } elseif (preg_match('/\/edit\/(\d+)/', $uri, $matches) && $method === 'GET') {
-        $id = filter_var($matches[1], FILTER_VALIDATE_INT);
-        if ($id === false || $id < 1) {
-            http_response_code(400);
-            echo "Invalid task ID format";
-            exit;
-        }
-        $controller->edit($id);
-    } elseif (preg_match('/\/update\/(\d+)/', $uri, $matches) && $method === 'POST') {
-        $id = filter_var($matches[1], FILTER_VALIDATE_INT);
-        if ($id === false) {
-            http_response_code(400);
-            echo "Invalid task ID format";
-            exit;
-        }
-        $controller->update($id, $_POST);
-        header('Location: /');
-        exit;
-    } elseif (preg_match('/\/delete\/(\d+)/', $uri, $matches) && $method === 'POST') {
-        $id = filter_var($matches[1], FILTER_VALIDATE_INT);
-        if ($id === false) {
-            http_response_code(400);
-            echo "Invalid task ID format";
-            exit;
-        }
-        if (!isset($_POST['csrf_token'])) {
-            http_response_code(400);
-            echo "Missing CSRF token";
-            exit;
-        }
-        $controller->delete($id, $_POST['csrf_token']);
-        header('Location: /');
-        exit;
-    } else {
-        http_response_code(404);
-        echo "404 Not Found";
-    }
-} catch (Exception $e) {
-    error_log($e->getMessage());
-    http_response_code(500);
-    echo "An internal server error occurred. Please try again later.";
-}
+$router->get('/',              fn()       => $controller->index());
+$router->get('/create',        fn()       => $controller->create());
+$router->post('/tasks',        fn()       => $controller->store($_POST));
+$router->get('/edit/{id}',     fn($id)    => $controller->edit($id));
+$router->post('/update/{id}',  fn($id)    => $controller->update($id, $_POST));
+$router->post('/delete/{id}',  fn($id)    => $controller->delete($id, $_POST));
+
+$uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$method = $_SERVER['REQUEST_METHOD'];
+
+$router->dispatch($method, $uri);
