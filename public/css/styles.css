@@ -218,11 +218,11 @@ ul {
             }
 
             & .btn-danger {
-                color: var(--grey);
+                color: oklch(50% 0.22 25);
 
                 &:hover {
-                    background: oklch(25% 0.00 0 / 0.08);
-                    color: var(--black);
+                    background: oklch(95% 0.04 25);
+                    color: oklch(38% 0.2 25);
                 }
             }
         }
