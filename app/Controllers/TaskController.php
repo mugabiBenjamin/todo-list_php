@@ -2,70 +2,104 @@
 
 namespace App\Controllers;
 
+use App\Interfaces\TaskRepositoryInterface;
+use App\Helpers\CsrfGuard;
+use App\Helpers\InputSanitizer;
+use App\Helpers\RateLimiter;
 use App\Models\Task;
-use App\Database\DatabaseManager;
-use App\Helpers\Security;
+use App\Validators\TaskValidator;
+use App\Config\Paths;
 
 class TaskController
 {
-    private $db;
+    public function __construct(
+        private readonly TaskRepositoryInterface $repository,
+        private readonly CsrfGuard              $csrf,
+        private readonly InputSanitizer         $sanitizer,
+        private readonly RateLimiter            $rateLimiter,
+        private readonly TaskValidator          $validator,
+    ) {}
 
-    public function __construct(DatabaseManager $db)
+    public function index(): void
     {
-        $this->db = $db;
+        $tasks = $this->repository->all();
+        require Paths::views() . DIRECTORY_SEPARATOR . 'Tasks' . DIRECTORY_SEPARATOR . 'index.php';
     }
 
-    public function index()
+    public function create(): void
     {
-        $tasks = Task::all($this->db);
-        require_once __DIR__ . '/../Views/Tasks/index.php';
+        require Paths::views() . DIRECTORY_SEPARATOR . 'Tasks' . DIRECTORY_SEPARATOR . 'create.php';
     }
 
-    public function create()
+    public function store(array $data): void
     {
-        require_once __DIR__ . '/../Views/Tasks/create.php';
-    }
-
-    public function store($data)
-    {
-        $name = Security::sanitize($data['name']);
-
-        if (strlen($name) < 3 || strlen($name) > 255) {
-            http_response_code(400);
-            echo "Task name must be between 3 and 255 characters.";
-            exit;
-        }
-
-        if (!Security::checkRateLimit('task_create', 10, 60)) {
+        if (!$this->rateLimiter->check('task_create', 10, 60)) {
             http_response_code(429);
-            echo "Too many requests. Please try again later.";
-            exit;
+            echo 'Too many requests. Please try again later.';
+            return;
         }
 
-        Security::verifyCsrfToken($data['csrf_token']);
-        $name = Security::sanitize($data['name']);
-        $task = new Task(null, $name, 0);
-        $task->save($this->db);
+        $this->csrf->verifyToken($data['csrf_token'] ?? '');
+
+        $name = $this->sanitizer->sanitize($data['name'] ?? '');
+
+        if (!$this->validator->validate(['name' => $name])) {
+            http_response_code(400);
+            echo $this->validator->firstError();
+            return;
+        }
+
+        $this->repository->save(new Task(null, $name));
+        header('Location: /');
+        exit;
     }
 
-    public function edit($id)
+    public function edit(string $id): void
     {
-        $task = Task::find($this->db, $id);
-        require_once __DIR__ . '/../Views/Tasks/edit.php';
+        $task = $this->repository->find((int) $id);
+
+        if ($task === null) {
+            http_response_code(404);
+            require Paths::views() . DIRECTORY_SEPARATOR . 'Errors' . DIRECTORY_SEPARATOR . '404.php';
+            return;
+        }
+
+        require Paths::views() . DIRECTORY_SEPARATOR . 'Tasks' . DIRECTORY_SEPARATOR . 'edit.php';
     }
 
-    public function update($id, $data)
+    public function update(string $id, array $data): void
     {
-        Security::verifyCsrfToken($data['csrf_token']);
-        $name = Security::sanitize($data['name']);
-        $completed = isset($data['completed']) ? 1 : 0;
-        $task = new Task($id, $name, $completed);
-        $task->update($this->db);
+        $this->csrf->verifyToken($data['csrf_token'] ?? '');
+
+        $task = $this->repository->find((int) $id);
+
+        if ($task === null) {
+            http_response_code(404);
+            require Paths::views() . DIRECTORY_SEPARATOR . 'Errors' . DIRECTORY_SEPARATOR . '404.php';
+            return;
+        }
+
+        $name = $this->sanitizer->sanitize($data['name'] ?? '');
+
+        if (!$this->validator->validate(['name' => $name])) {
+            http_response_code(400);
+            echo $this->validator->firstError();
+            return;
+        }
+
+        $task->name      = $name;
+        $task->completed = isset($data['completed']) && $data['completed'] === '1';
+
+        $this->repository->update($task);
+        header('Location: /');
+        exit;
     }
 
-    public function delete($id, $token)
+    public function delete(string $id, array $data): void
     {
-        Security::verifyCsrfToken($token);
-        Task::destroy($this->db, $id);
+        $this->csrf->verifyToken($data['csrf_token'] ?? '');
+        $this->repository->delete((int) $id);
+        header('Location: /');
+        exit;
     }
 }
