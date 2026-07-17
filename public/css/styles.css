@@ -134,24 +134,24 @@ ul {
 
     /* Task list */
     & ul {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+
         & li {
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: var(--space-sm);
-            padding: var(--space-sm) var(--space-sm) var(--space-sm) var(--space-md);
+            padding: var(--space-sm) var(--space-md);
             border-radius: var(--radius-sm);
-            border-left: 3px solid var(--blue-mid);
-            margin-block-start: var(--space-xs);
+            border: 1.5px solid oklch(88% 0.01 240);
+            background: var(--white);
             transition: border-color var(--transition), background var(--transition);
 
-            &:first-child {
-                margin-block-start: 0;
-            }
-
             &:hover {
-                border-left-color: var(--blue-light);
-                background: oklch(96% 0.01 240);
+                border-color: var(--blue-light);
+                background: oklch(97% 0.01 240);
             }
         }
     }
