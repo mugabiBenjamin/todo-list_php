@@ -18,31 +18,21 @@ class DatabaseManager implements DatabaseConnectionInterface
     private function connect(): PDO
     {
         try {
-            $usePooler = !empty($this->config['pooler']['host']);
-
-            $host = $usePooler
-                ? $this->config['pooler']['host']
-                : $this->config['host'];
-
-            $port = $usePooler
-                ? $this->config['pooler']['port']
-                : $this->config['port'];
-
             $dsn = sprintf(
                 'pgsql:host=%s;port=%s;dbname=%s;sslmode=require',
-                $host,
-                $port,
+                $this->config['host'],
+                $this->config['port'],
                 $this->config['database']
             );
 
-            $options = [
-                PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+            $pdo = new PDO($dsn, $this->config['user'], $this->config['password'], [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-                PDO::ATTR_EMULATE_PREPARES   => $usePooler,
-                PDO::ATTR_PERSISTENT         => true,
-            ];
+                PDO::ATTR_EMULATE_PREPARES => false,
+                PDO::ATTR_PERSISTENT => true,
+            ]);
 
-            return new PDO($dsn, $this->config['user'], $this->config['password'], $options);
+            return $pdo;
 
         } catch (PDOException $e) {
             error_log('Database connection failed: ' . $e->getMessage());
