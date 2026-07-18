@@ -2,7 +2,6 @@
 
 use App\Controllers\TaskController;
 use App\Database\DatabaseManager;
-use App\Database\Migrations\CreateTasksTable;
 use App\Helpers\CsrfGuard;
 use App\Helpers\InputSanitizer;
 use App\Helpers\RateLimiter;
@@ -12,9 +11,6 @@ use App\Validators\TaskValidator;
 use App\Config\Database;
 
 $db         = new DatabaseManager(Database::config());
-$migration  = new CreateTasksTable($db);
-$migration->up();
-
 $repository = new PdoTaskRepository($db);
 $controller = new TaskController(
     repository:  $repository,
@@ -26,12 +22,12 @@ $controller = new TaskController(
 
 $router = new Router();
 
-$router->get('/',              fn()       => $controller->index());
-$router->get('/create',        fn()       => $controller->create());
-$router->post('/tasks',        fn()       => $controller->store($_POST));
-$router->get('/edit/{id}',     fn($id)    => $controller->edit($id));
-$router->post('/update/{id}',  fn($id)    => $controller->update($id, $_POST));
-$router->post('/delete/{id}',  fn($id)    => $controller->delete($id, $_POST));
+$router->get('/',             fn()     => $controller->index());
+$router->get('/create',       fn()     => $controller->create());
+$router->post('/tasks',       fn()     => $controller->store($_POST));
+$router->get('/edit/{id}',    fn($id)  => $controller->edit($id));
+$router->post('/update/{id}', fn($id)  => $controller->update($id, $_POST));
+$router->post('/delete/{id}', fn($id)  => $controller->delete($id, $_POST));
 
 $uri    = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $method = $_SERVER['REQUEST_METHOD'];
