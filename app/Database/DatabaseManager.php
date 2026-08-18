@@ -35,8 +35,7 @@ class DatabaseManager implements DatabaseConnectionInterface
             return $pdo;
 
         } catch (PDOException $e) {
-            error_log('Database connection failed: ' . $e->getMessage());
-            throw new \RuntimeException('Database connection failed.');
+            throw new \RuntimeException('DB error: ' . $e->getMessage());
         }
     }
 
