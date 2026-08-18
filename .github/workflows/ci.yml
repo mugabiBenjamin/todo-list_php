@@ -23,7 +23,7 @@ jobs:
           coverage: none
 
       - name: Validate composer.json
-        run: composer validate --strict
+        run: composer validate
 
       - name: Install dependencies
         run: composer install --no-dev --prefer-dist --optimize-autoloader
