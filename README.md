@@ -4,8 +4,9 @@
 [![PHP Version](https://img.shields.io/badge/PHP-8.2%2B-blue.svg)](https://www.php.net/downloads)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15%2B-336791.svg)](https://www.postgresql.org/)
 [![Composer](https://img.shields.io/badge/Composer-2.0%2B-orange.svg)](https://getcomposer.org/)
+****[![Docker](https://img.shields.io/badge/Docker-28%2B-2496ED.svg)](https://www.docker.com/)
 
-A lightweight To-Do List application built with vanilla PHP 8.2+, following an MVC-inspired architecture. Backed by PostgreSQL (compatible with [Neon](https://neon.tech) serverless Postgres) and secured with CSRF protection, rate limiting, input sanitization, and strict HTTP security headers.
+A lightweight To-Do List application built with vanilla PHP 8.2+, following an MVC-inspired architecture. Backed by PostgreSQL via [Neon](https://neon.tech) serverless Postgres, deployed on [Render](https://render.com) using Docker, and secured with CSRF protection, rate limiting, input sanitization, and strict HTTP security headers.
 
 ## Table of Contents
 
@@ -20,12 +21,9 @@ A lightweight To-Do List application built with vanilla PHP 8.2+, following an M
   - [Database Migration](#database-migration)
   - [Running the App](#running-the-app)
     - [Development — PHP built-in server](#development--php-built-in-server)
-    - [Production — Nginx + PHP-FPM](#production--nginx--php-fpm)
-      - [1. Create required directories](#1-create-required-directories)
-      - [2. Disable the default PHP-FPM pool](#2-disable-the-default-php-fpm-pool)
-      - [3. Copy config files](#3-copy-config-files)
-      - [4. SSL certificate](#4-ssl-certificate)
-      - [5. Start services](#5-start-services)
+    - [Production — Docker](#production--docker)
+  - [Deploying to Render](#deploying-to-render)
+  - [CI/CD](#cicd)
   - [Usage](#usage)
   - [Project Structure](#project-structure)
   - [Routes](#routes)
@@ -42,27 +40,32 @@ A lightweight To-Do List application built with vanilla PHP 8.2+, following an M
 - Rate limiting on task creation (10 requests / 60 s)
 - Input sanitization and server-side validation
 - Secure session configuration (HttpOnly, SameSite Strict, Secure)
-- HTTP security headers (CSP, HSTS, X-Frame-Options, etc.)
+- HTTP security headers (CSP, X-Frame-Options, X-Content-Type-Options, etc.)
 - Session-based task list caching (invalidated on writes)
 - OPcache with JIT for reduced PHP overhead in production
+- Dockerized with multi-stage builds for lean production images
+- GitHub Actions CI pipeline with automated Docker build validation
 
 ## Technologies Used
 
-| Layer      | Technology                                                     |
-| ---------- | -------------------------------------------------------------- |
-| Language   | [PHP 8.2+](https://www.php.net/)                               |
-| Database   | [PostgreSQL](https://www.postgresql.org/) via PDO              |
-| Hosting    | [Neon](https://neon.tech) (serverless Postgres) or self-hosted |
-| Deps       | [Composer](https://getcomposer.org/) + `vlucas/phpdotenv`      |
-| Frontend   | Plain HTML/CSS (no framework, no JS)                           |
-| Web server | Nginx + PHP-FPM (production) or PHP built-in server (dev)      |
+| Layer      | Technology                                                          |
+| ---------- | ------------------------------------------------------------------- |
+| Language   | [PHP 8.2+](https://www.php.net/)                                    |
+| Database   | [PostgreSQL](https://www.postgresql.org/) via PDO                   |
+| Hosting DB | [Neon](https://neon.tech) (serverless Postgres)                     |
+| Hosting App| [Render](https://render.com) (Docker Web Service)                   |
+| Deps       | [Composer](https://getcomposer.org/) + `vlucas/phpdotenv`           |
+| Frontend   | Plain HTML/CSS (no framework, no JS)                                |
+| Web server | Nginx + PHP-FPM (production) or PHP built-in server (dev)           |
+| Container  | Docker with multi-stage build                                       |
+| CI/CD      | GitHub Actions                                                      |
 
 ## Requirements
 
 - PHP 8.2+ with `pdo`, `pdo_pgsql`, and `opcache` extensions
 - Composer 2.0+
 - PostgreSQL 15+ or a Neon serverless Postgres project
-- Nginx + PHP-FPM (production) **or** PHP built-in server (development)
+- Docker 28+ (production) **or** PHP built-in server (development)
 
 ### Install PHP 8.2 and Nginx on Ubuntu
 
@@ -80,8 +83,8 @@ sudo apt install nginx php8.2-fpm php8.2-pgsql php8.2-opcache -y
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/yourusername/todo-list-php.git
-   cd todo-list-php
+   git clone https://github.com/mugabiBenjamin/todo-list_php.git
+   cd todo-list_php
    ```
 
 2. **Install dependencies:**
@@ -134,7 +137,7 @@ Expected output:
 
 This creates the `tasks` table if it does not already exist. It is safe to re-run.
 
----
+On Render, this is wired as a **pre-deploy command** so it runs automatically against the live Neon database before each deployment (see [Deploying to Render](#deploying-to-render)).
 
 ## Running the App
 
@@ -146,61 +149,54 @@ php -S localhost:8000 -t public
 
 The app will be available at `http://localhost:8000`.
 
-> `session.cookie_secure` is set to `1` in `public/index.php`. On plain HTTP the session cookie will not be sent by the browser. For local dev either use the Nginx setup below with a self-signed cert, or temporarily set `session.cookie_secure = 0` in `public/index.php`.
+> `session.cookie_secure` is resolved dynamically in `public/index.php` by checking the `HTTPS` and `X-Forwarded-Proto` headers. On plain HTTP in local dev, the secure flag will be off automatically — no manual change needed.
 
-### Production — Nginx + PHP-FPM
+### Production — Docker
 
-#### 1. Create required directories
-
-```bash
-sudo mkdir -p /var/log/php-fpm
-sudo chown www-data:www-data /var/log/php-fpm
-
-sudo mkdir -p /var/lib/php/sessions/todo-list-php
-sudo chown www-data:www-data /var/lib/php/sessions/todo-list-php
-```
-
-#### 2. Disable the default PHP-FPM pool
-
-The default `www` pool uses the same socket path as the project pool and will conflict:
+Build and run the container locally:
 
 ```bash
-sudo mv /etc/php/8.2/fpm/pool.d/www.conf /etc/php/8.2/fpm/pool.d/www.conf.disabled
+docker build -t todo-list-php .
+docker run -p 8080:8080 --env-file .env todo-list-php
 ```
 
-#### 3. Copy config files
+The app will be available at `http://localhost:8080`.
 
-From the project root:
+The container runs Nginx + PHP-FPM. The `PORT` environment variable is resolved at startup via the entrypoint script — defaulting to `8080` if not set.
 
-```bash
-sudo cp php-fpm.conf /etc/php/8.2/fpm/pool.d/todo-list-php.conf
-sudo cp opcache.ini  /etc/php/8.2/fpm/conf.d/99-opcache.ini
-sudo cp nginx.conf   /etc/nginx/sites-available/todo-list-php
-sudo ln -s /etc/nginx/sites-available/todo-list-php /etc/nginx/sites-enabled/
-```
+## Deploying to Render
 
-#### 4. SSL certificate
+1. Push your code to GitHub.
+2. Create a new **Web Service** on [Render](https://render.com).
+3. Connect your GitHub repository and select **Docker** as the runtime.
+4. Add all variables from `.env.example` under **Environment → Environment Variables**.
+5. Under **Settings → Deploy**, set the **Pre-Deploy Command** to:
 
-For production, replace the paths in `nginx.conf` with your real certificate and key. For local HTTPS with a self-signed cert:
+   ```php
+   php migrate.php
+   ```
 
-```bash
-sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
-  -keyout /etc/ssl/private/your-domain.key \
-  -out /etc/ssl/certs/your-domain.crt \
-  -subj "/CN=localhost"
-```
+6. Deploy. Render will build the Docker image, run the migration against Neon, then switch traffic to the new container.
 
-Browsers will show a certificate warning for self-signed certs — click **Advanced → Proceed** to continue.
+Render handles TLS termination at their edge — no SSL configuration is needed inside the container.
 
-#### 5. Start services
+## CI/CD
 
-```bash
-sudo nginx -t
-sudo systemctl restart php8.2-fpm
-sudo systemctl reload nginx
-```
+A GitHub Actions pipeline runs on every push to `main` and on all pull requests targeting `main`.
 
-The app will be available at `https://localhost`.
+**`validate` job:**
+
+- Validates `composer.json`
+- Installs Composer dependencies
+- Lints all PHP files with `php -l`
+- Verifies `.env.example` and `Dockerfile` are present
+
+**`build` job** (runs only if `validate` passes):
+
+- Builds the Docker image using the production `Dockerfile`
+- Uses GitHub Actions layer caching to speed up subsequent builds
+
+Render auto-deploys on every push to `main` via its GitHub integration, independently of the Actions pipeline.
 
 ## Usage
 
@@ -213,49 +209,30 @@ The app will be available at `https://localhost`.
 ## Project Structure
 
 ```plaintext
+├── .github/
+│   └── workflows/
+│       └── ci.yml              # GitHub Actions CI pipeline
 ├── app/
 │   ├── Config/
-│   │   ├── Database.php        # Reads DB config from $_ENV
-│   │   └── Paths.php           # Filesystem path helpers
 │   ├── Controllers/
-│   │   └── TaskController.php  # Request handling & orchestration
 │   ├── Database/
-│   │   ├── DatabaseManager.php         # PDO connection (PostgreSQL, persistent)
-│   │   └── Migrations/
-│   │       └── CreateTasksTable.php    # Run via migrate.php
 │   ├── Helpers/
-│   │   ├── CsrfGuard.php       # Token generation & verification
-│   │   ├── InputSanitizer.php  # trim / strip_tags / htmlspecialchars
-│   │   ├── PasswordHasher.php  # Argon2id hashing (available for auth)
-│   │   └── RateLimiter.php     # Session-based rate limiting
 │   ├── Interfaces/
-│   │   ├── DatabaseConnectionInterface.php
-│   │   └── TaskRepositoryInterface.php
 │   ├── Models/
-│   │   └── Task.php            # Task value object
 │   ├── Repositories/
-│   │   └── PdoTaskRepository.php   # SQL via PDO, session cache, hydrates Task models
 │   ├── Routes/
-│   │   ├── Router.php          # Regex-based GET/POST router
-│   │   └── web.php             # Route definitions & DI wiring
 │   ├── Validators/
-│   │   └── TaskValidator.php   # Name length validation
 │   └── Views/
 │       ├── Errors/
-│       │   ├── 404.php
-│       │   └── 500.php
 │       └── Tasks/
-│           ├── index.php       # Task list
-│           ├── create.php      # Create form
-│           └── edit.php        # Edit form
+├── docker/
 ├── public/
 │   ├── index.php               # Front controller
 │   └── css/
 │       └── styles.css          # OKLCH palette, fluid type, no framework
+├── Dockerfile                  # Multi-stage production build
+├── docker-entrypoint.sh        # PORT substitution + service startup
 ├── migrate.php                 # Standalone CLI migration script
-├── nginx.conf                  # Nginx server block (HTTP → HTTPS + PHP-FPM)
-├── php-fpm.conf                # PHP-FPM pool config
-├── opcache.ini                 # OPcache + JIT settings
 ├── .env.example
 ├── composer.json
 └── README.md
@@ -274,30 +251,33 @@ The app will be available at `https://localhost`.
 
 ## Security
 
-| Measure               | Implementation                                         |
-| --------------------- | ------------------------------------------------------ |
-| CSRF protection       | `CsrfGuard` — token per session, `hash_equals` verify  |
-| Input sanitization    | `InputSanitizer` — trim, strip_tags, htmlspecialchars  |
-| Rate limiting         | `RateLimiter` — session-based, 10 req/60 s on create   |
-| Password hashing      | `PasswordHasher` — Argon2id with tuned cost params     |
-| Prepared statements   | All queries via PDO with `ATTR_EMULATE_PREPARES=false` |
-| Secure session config | HttpOnly, SameSite=Strict, Secure, 1 h lifetime        |
-| HTTP security headers | CSP, HSTS, X-Frame-Options, X-Content-Type-Options     |
-| Error suppression     | `display_errors=0`; errors logged, not exposed         |
-| Nginx hardening       | Blocks `.env`, `.log`, `.json`, dotfiles from serving  |
+| Measure               | Implementation                                                      |
+| --------------------- | ------------------------------------------------------------------- |
+| CSRF protection       | `CsrfGuard` — token per session, `hash_equals` verify               |
+| Input sanitization    | `InputSanitizer` — trim, strip_tags, htmlspecialchars               |
+| Rate limiting         | `RateLimiter` — session-based, 10 req/60 s on create                |
+| Password hashing      | `PasswordHasher` — Argon2id with tuned cost params                  |
+| Prepared statements   | All queries via PDO with `ATTR_EMULATE_PREPARES=false`              |
+| Secure session config | HttpOnly, SameSite=Strict, Secure (env-aware), 1 h lifetime         |
+| HTTP security headers | CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy       |
+| TLS                   | Terminated at Render's edge; HSTS not set inside the container      |
+| Error suppression     | `display_errors=0`; errors logged, not exposed                      |
+| Nginx hardening       | Blocks `.env`, `.log`, `.json`, dotfiles from being served          |
 
 ## Performance
 
-| Optimisation          | Detail                                                              |
-| --------------------- | ------------------------------------------------------------------- |
-| Persistent PDO        | `ATTR_PERSISTENT=true` — FPM workers reuse DB connections           |
-| Session task cache    | `all()` reads from `$_SESSION`; invalidated on write operations     |
-| OPcache + JIT         | Bytecode cached; tracing JIT with 64 MB buffer (PHP 8.0+)           |
-| Static asset caching  | Nginx serves CSS/JS with 30-day `Cache-Control`                     |
-| Migration on demand   | `migrate.php` runs once via CLI — not on every HTTP request         |
-| PHP-FPM dynamic pool  | 2–6 spare workers, recycled after 500 requests to prevent bloat     |
+| Optimisation          | Detail                                                                |
+| --------------------- | --------------------------------------------------------------------- |
+| Persistent PDO        | `ATTR_PERSISTENT=true` — FPM workers reuse DB connections             |
+| Session task cache    | `all()` reads from `$_SESSION`; invalidated on write operations       |
+| OPcache + JIT         | Bytecode cached; tracing JIT with 64 MB buffer (PHP 8.0+)             |
+| Static asset caching  | Nginx serves CSS/JS with 30-day `Cache-Control`                       |
+| Migration on demand   | Runs once via Render pre-deploy command — not on every HTTP request   |
+| PHP-FPM dynamic pool  | 2–6 spare workers, recycled after 500 requests to prevent bloat       |
+| Docker multi-stage    | Composer stage excluded from final image — leaner production artifact |
+| CI layer caching      | GitHub Actions caches Docker layers across builds via `type=gha`      |
 
-> **OPcache in development:** set `opcache.validate_timestamps=1` locally so PHP picks up file changes without restarting FPM. Keep it `0` in production.
+> **OPcache in development:** `opcache.validate_timestamps` is `0` in `docker/opcache.ini` (production). For local dev with the PHP built-in server, OPcache is not active so this has no effect.
 
 ## Contributing
 
