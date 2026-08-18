@@ -13,8 +13,10 @@ use App\Config\Database;
 use App\Database\DatabaseManager;
 use App\Database\Migrations\CreateTasksTable;
 
-$dotenv = Dotenv\Dotenv::createImmutable(APP_ROOT);
-$dotenv->load();
+if (file_exists(APP_ROOT . '/.env')) {
+    $dotenv = Dotenv\Dotenv::createImmutable(APP_ROOT);
+    $dotenv->load();
+}
 
 try {
     $db        = new DatabaseManager(Database::config());

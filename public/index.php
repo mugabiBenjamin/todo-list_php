@@ -27,8 +27,10 @@ require_once APP_ROOT . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . '
 ob_start();
 
 try {
-    $dotenv = Dotenv\Dotenv::createImmutable(APP_ROOT);
-    $dotenv->load();
+    if (file_exists(APP_ROOT . DIRECTORY_SEPARATOR . '.env')) {
+        $dotenv = Dotenv\Dotenv::createImmutable(APP_ROOT);
+        $dotenv->load();
+    }
 
     session_start();
 
