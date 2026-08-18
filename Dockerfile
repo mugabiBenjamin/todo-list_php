@@ -43,6 +43,9 @@ RUN mkdir -p /var/log/php-fpm /var/lib/php/sessions/todo-list-php \
         /var/lib/php/sessions/todo-list-php \
     && chown -R www-data:www-data /var/log/nginx
 
+RUN mkdir -p /run/php \
+    && chown -R www-data:www-data /run/php
+
 COPY docker/php-fpm.conf /etc/php/8.2/fpm/pool.d/todo-list-php.conf
 
 RUN rm -f /etc/php/8.2/fpm/pool.d/www.conf
