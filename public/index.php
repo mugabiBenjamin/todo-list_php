@@ -52,7 +52,9 @@ try {
     error_log($e->getMessage());
     ob_clean();
     http_response_code(500);
-    require APP_ROOT . DIRECTORY_SEPARATOR . 'app' . DIRECTORY_SEPARATOR . 'Views' . DIRECTORY_SEPARATOR . 'Errors' . DIRECTORY_SEPARATOR . '500.php';
+    // TEMPORARY - remove after debugging
+    echo '<pre style="padding:2rem;font-size:1rem;">' . htmlspecialchars($e->getMessage()) . '</pre>';
+    exit;
 }
 
 ob_end_flush();
