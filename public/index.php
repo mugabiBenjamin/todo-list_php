@@ -32,6 +32,14 @@ try {
         $dotenv->load();
     }
 
+    echo '<pre>';
+    echo 'DB_HOST: [' . ($_ENV['DB_HOST'] ?? 'NOT SET') . ']' . PHP_EOL;
+    echo 'DB_PORT: [' . ($_ENV['DB_PORT'] ?? 'NOT SET') . ']' . PHP_EOL;
+    echo 'DB_USER: [' . ($_ENV['DB_USER'] ?? 'NOT SET') . ']' . PHP_EOL;
+    echo 'DB_NAME: [' . ($_ENV['DB_NAME'] ?? 'NOT SET') . ']' . PHP_EOL;
+    echo '</pre>';
+    exit;
+
     session_start();
 
     $secureHeaders = [
