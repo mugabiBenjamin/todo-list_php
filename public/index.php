@@ -40,6 +40,14 @@ try {
     echo 'DB_HOST $_ENV: [' . ($_ENV['DB_HOST'] ?? 'NOT SET') . ']' . PHP_EOL;
     echo 'DB_HOST $_SERVER: [' . ($_SERVER['DB_HOST'] ?? 'NOT SET') . ']' . PHP_EOL;
     echo 'DB_HOST getenv: [' . (getenv('DB_HOST') ?: 'NOT SET') . ']' . PHP_EOL;
+    echo 'ALL ENV VARS:' . PHP_EOL;
+    foreach (getenv() as $key => $value) {
+        if (str_starts_with($key, 'DB') || str_starts_with($key, 'PG')) {
+            echo $key . ': [' . $value . ']' . PHP_EOL;
+        }
+    }
+    echo 'PATH exists: ' . (getenv('PATH') ? 'yes' : 'no') . PHP_EOL;
+    echo '</pre>';
     echo '</pre>';
     exit;
 
