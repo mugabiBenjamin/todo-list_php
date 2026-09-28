@@ -73,13 +73,25 @@ A lightweight To-Do List application built with vanilla PHP 8.2+, following an M
 
 ### Install PHP 8.2 and Nginx on Ubuntu
 
-Ubuntu's default repos may not include PHP 8.2. Add the Ondřej Surý PPA first:
+Ubuntu Resolute's default repositories may not provide PHP 8.2. For Ubuntu Resolute, use the Ondřej Surý PHP repository (`packages.sury.org`)
 
 ```bash
-sudo apt install software-properties-common -y
-sudo add-apt-repository ppa:ondrej/php -y
 sudo apt update
-sudo apt install nginx php8.2-fpm php8.2-pgsql php8.2-opcache -y
+sudo apt install -y lsb-release ca-certificates curl gnupg
+
+# Add the repository signing key:
+curl -fsSL https://packages.sury.org/php/apt.gpg \
+  | sudo gpg --dearmor -o /usr/share/keyrings/sury-php.gpg
+
+# Add Add the PHP repository:
+echo "deb [signed-by=/usr/share/keyrings/sury-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" \
+  | sudo tee /etc/apt/sources.list.d/sury-php.list
+
+# Update the package
+sudo apt update
+
+# Install Nginx, PHP 8.2-FPM, PostgreSQL support, and OPcache:
+sudo apt install -y nginx php8.2-fpm php8.2-pgsql php8.2-opcache
 ```
 
 ## Installation
