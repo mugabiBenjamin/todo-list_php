@@ -32,7 +32,9 @@ try {
         $dotenv->load();
     }
 
-    session_start();
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
 
     $secureHeaders = [
         'Content-Security-Policy' => "default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self';",
@@ -40,6 +42,8 @@ try {
         'X-Frame-Options'         => 'DENY',
         'X-XSS-Protection'        => '1; mode=block',
         'Referrer-Policy'         => 'strict-origin-when-cross-origin',
+        'Cache-Control'           => 'no-store, no-cache, must-revalidate, max-age=0',
+        'Pragma'                  => 'no-cache',
     ];
 
     foreach ($secureHeaders as $header => $value) {
