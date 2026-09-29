@@ -14,7 +14,7 @@
         <h1>Internal Server Error</h1>
         <p>Something went wrong on our end. Please try again in a moment.</p>
         <p>If the problem persists, contact support.</p>
-        <a href="/">Back to Task List</a>
+        <a href="/">Go to Home</a>
     </div>
 </body>
 

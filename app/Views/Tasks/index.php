@@ -16,8 +16,16 @@ $csrf = new CsrfGuard();
 
 <body class="index-page">
     <div class="container-md">
-        <h2>My To-Do List</h2>
+        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="margin: 0;">My To-Do List</h2>
+            <form action="/logout" method="POST" style="margin: 0;">
+                <input type="hidden" name="csrf_token" value="<?php echo $csrf->generateToken(); ?>">
+                <button type="submit" class="btn-danger">Logout</button>
+            </form>
+        </header>
+
         <a href="/create">+ Add New Task</a>
+
         <?php if (empty($tasks)): ?>
             <p>No tasks yet. Add one above to get started.</p>
         <?php else: ?>
