@@ -2,6 +2,8 @@
 
 namespace App\Helpers;
 
+use RuntimeException;
+
 class PasswordHasher
 {
     private const ALGORITHM = PASSWORD_ARGON2ID;
@@ -14,7 +16,13 @@ class PasswordHasher
 
     public function hash(string $password): string
     {
-        return password_hash($password, self::ALGORITHM, self::OPTIONS);
+        $hash = password_hash($password, self::ALGORITHM, self::OPTIONS);
+        
+        if ($hash === false) {
+            throw new RuntimeException('Failed to generate Argon2id password hash.');
+        }
+        
+        return $hash;
     }
 
     public function verify(string $password, string $hash): bool
