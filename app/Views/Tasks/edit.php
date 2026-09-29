@@ -1,6 +1,9 @@
 <?php
 
 use App\Helpers\CsrfGuard;
+use App\Models\Task;
+
+/** @var Task $task */
 
 $csrf = new CsrfGuard();
 ?>
@@ -16,14 +19,23 @@ $csrf = new CsrfGuard();
 
 <body class="edit-page">
     <div class="container-md">
-        <h2>Edit Task</h2>
+        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="margin: 0;">Edit Task</h2>
+            <form action="/logout" method="POST" style="margin: 0;">
+                <input type="hidden" name="csrf_token" value="<?php echo $csrf->generateToken(); ?>">
+                <button type="submit" class="btn-danger">Logout</button>
+            </form>
+        </header>
+
         <form action="/update/<?php echo (int) $task->id; ?>" method="POST">
             <input type="hidden" name="csrf_token" value="<?php echo $csrf->generateToken(); ?>">
             <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($task->name); ?>" required
                 maxlength="255" pattern="[A-Za-z0-9\s\-_.,!?]{3,255}"><br>
             <small>Task name must be 3-255 characters.</small><br><br>
+
             <label for="completed">Completed:</label><br>
             <input type="checkbox" id="completed" name="completed" value="1" <?php echo $task->completed ? 'checked' : ''; ?>><br><br>
+
             <button type="submit" class="btn-update">Update Task</button>
         </form>
         <a href="/">Back to Task List</a>

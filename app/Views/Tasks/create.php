@@ -16,7 +16,14 @@ $csrf = new CsrfGuard();
 
 <body class="create-page">
     <div class="container-md">
-        <h2>Create New Task</h2>
+        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="margin: 0;">Create New Task</h2>
+            <form action="/logout" method="POST" style="margin: 0;">
+                <input type="hidden" name="csrf_token" value="<?php echo $csrf->generateToken(); ?>">
+                <button type="submit" class="btn-danger">Logout</button>
+            </form>
+        </header>
+
         <form action="/tasks" method="POST">
             <input type="hidden" name="csrf_token" value="<?php echo $csrf->generateToken(); ?>">
             <input type="text" id="name" name="name" required maxlength="255" pattern="[A-Za-z0-9\s\-_.,!?]{3,255}"

@@ -12,7 +12,7 @@
     <div class="container-md">
         <h1>404</h1>
         <p>The page you are looking for does not exist.</p>
-        <a href="/">Back to Task List</a>
+        <a href="/">Go to Home</a>
     </div>
 </body>
 

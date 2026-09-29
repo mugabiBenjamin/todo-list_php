@@ -28,7 +28,7 @@ ob_start();
 
 try {
     if (file_exists(APP_ROOT . DIRECTORY_SEPARATOR . '.env')) {
-        $dotenv = Dotenv\Dotenv::createImmutable(APP_ROOT);
+        $dotenv = \Dotenv\Dotenv::createImmutable(APP_ROOT);
         $dotenv->load();
     }
 
