@@ -30,6 +30,7 @@ $authMiddleware = new AuthMiddleware($authService);
 
 $taskController = new TaskController(
     repository:  $taskRepository,
+    authService: $authService, 
     csrf:        $csrf,
     sanitizer:   $sanitizer,
     rateLimiter: $rateLimiter,
