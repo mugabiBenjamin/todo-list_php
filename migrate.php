@@ -12,6 +12,8 @@ require_once APP_ROOT . '/vendor/autoload.php';
 use App\Config\Database;
 use App\Database\DatabaseManager;
 use App\Database\Migrations\CreateTasksTable;
+use App\Database\Migrations\CreateUsersTable;
+use App\Database\Migrations\AddUserIdToTasksTable;
 
 if (file_exists(APP_ROOT . '/.env')) {
     $dotenv = Dotenv\Dotenv::createImmutable(APP_ROOT);
@@ -19,11 +21,13 @@ if (file_exists(APP_ROOT . '/.env')) {
 }
 
 try {
-    $db        = new DatabaseManager(Database::config());
-    $migration = new CreateTasksTable($db);
-    $migration->up();
+    $db = new DatabaseManager(Database::config());
+    
+    (new CreateUsersTable($db))->up();
+    (new CreateTasksTable($db))->up();
+    (new AddUserIdToTasksTable($db))->up();
 
-    echo '[OK] Migration completed successfully.' . PHP_EOL;
+    echo '[OK] Migrations completed successfully.' . PHP_EOL;
     exit(0);
 
 } catch (Throwable $e) {

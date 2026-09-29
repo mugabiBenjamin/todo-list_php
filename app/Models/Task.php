@@ -8,5 +8,6 @@ class Task
         public readonly ?int $id,
         public string $name,
         public bool $completed = false,
+        public ?int $user_id = null,
     ) {}
 }
