@@ -8,10 +8,12 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 
-<body>
+<body class="error-page">
     <div class="container-md">
-        <h1>404</h1>
+        <div class="error-code">404</div>
+        <h1>Page Not Found</h1>
         <p>The page you are looking for does not exist.</p>
+        <p>It may have been moved, deleted, or never existed.</p>
         <a href="/">Go to Home</a>
     </div>
 </body>
