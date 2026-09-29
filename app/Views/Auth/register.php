@@ -20,15 +20,16 @@ $csrf = new CsrfGuard();
         <form action="/register" method="POST">
             <input type="hidden" name="csrf_token" value="<?php echo $csrf->generateToken(); ?>">
 
-            <label for="email">Email:</label><br>
-            <input type="email" id="email" name="email" required><br><br>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required placeholder="you@example.com">
 
-            <label for="password">Password (min 8 chars):</label><br>
-            <input type="password" id="password" name="password" required minlength="8"><br><br>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required minlength="8" placeholder="Min. 8 characters">
+            <small>Password must be at least 8 characters.</small>
 
             <button type="submit" class="btn-primary">Register</button>
         </form>
-        <p style="margin-top: 15px;">Already have an account? <a href="/login">Login here</a>.</p>
+        <p class="auth-switch">Already have an account? <a href="/login">Login here</a>.</p>
     </div>
 </body>
 

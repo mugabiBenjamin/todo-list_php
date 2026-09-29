@@ -20,15 +20,15 @@ $csrf = new CsrfGuard();
         <form action="/login" method="POST">
             <input type="hidden" name="csrf_token" value="<?php echo $csrf->generateToken(); ?>">
 
-            <label for="email">Email:</label><br>
-            <input type="email" id="email" name="email" required><br><br>
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" required placeholder="you@example.com">
 
-            <label for="password">Password:</label><br>
-            <input type="password" id="password" name="password" required><br><br>
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" required placeholder="••••••••">
 
             <button type="submit" class="btn-primary">Login</button>
         </form>
-        <p style="margin-top: 15px;">Don't have an account? <a href="/register">Register here</a>.</p>
+        <p class="auth-switch">Don't have an account? <a href="/register">Register here</a>.</p>
     </div>
 </body>
 

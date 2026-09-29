@@ -390,3 +390,85 @@ ul {
         transition: none !important;
     }
 }
+
+/* AUTH PAGES (login / register) */
+.auth-page {
+    & .container-md {
+        & h2 {
+            margin-block-end: var(--space-lg);
+        }
+    }
+
+    & form {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    & label {
+        display: block;
+        font-size: var(--text-sm);
+        font-weight: 600;
+        color: var(--blue-deep);
+        margin-block-start: var(--space-md);
+        margin-block-end: var(--space-xs);
+    }
+
+    & input[type="email"],
+    & input[type="password"] {
+        inline-size: 100%;
+        padding: var(--space-sm) var(--space-md);
+        border: 1.5px solid oklch(85% 0.02 240);
+        border-radius: var(--radius-sm);
+        background: var(--grey-subtle);
+        color: var(--black);
+        font-size: var(--text-base);
+        transition: border-color var(--transition), background var(--transition);
+
+        &::placeholder {
+            color: var(--grey);
+        }
+
+        &:focus {
+            outline: none;
+            border-color: var(--blue-mid);
+            background: var(--white);
+        }
+    }
+
+    & small {
+        display: block;
+        margin-block-start: var(--space-xs);
+    }
+
+    & .btn-primary {
+        inline-size: 100%;
+        padding: var(--space-sm) var(--space-md);
+        margin-block-start: var(--space-lg);
+        background: var(--blue-mid);
+        color: var(--white);
+        border: none;
+        border-radius: var(--radius-sm);
+        font-size: var(--text-base);
+        font-weight: 700;
+        cursor: pointer;
+        letter-spacing: 0.01em;
+        transition: background var(--transition);
+
+        &:hover {
+            background: var(--blue-deep);
+        }
+
+        &:focus-visible {
+            outline: 2px solid var(--blue-light);
+            outline-offset: 3px;
+        }
+    }
+
+    & .auth-switch {
+        margin-block-start: var(--space-md);
+        font-size: var(--text-sm);
+        color: var(--grey);
+        text-align: center;
+    }
+}
