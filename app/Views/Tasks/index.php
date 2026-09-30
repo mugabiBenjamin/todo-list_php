@@ -16,13 +16,7 @@ $csrf = new CsrfGuard();
 
 <body class="index-page">
     <div class="container-md">
-        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="margin: 0;">My To-Do List</h2>
-            <form action="/logout" method="POST" style="margin: 0;">
-                <input type="hidden" name="csrf_token" value="<?php echo $csrf->generateToken(); ?>">
-                <button type="submit" class="btn-danger">Logout</button>
-            </form>
-        </header>
+        <h2>My To-Do List</h2>
 
         <a href="/create">+ Add New Task</a>
 
@@ -58,6 +52,11 @@ $csrf = new CsrfGuard();
                 <?php endforeach; ?>
             </ul>
         <?php endif; ?>
+
+        <form action="/logout" method="POST" class="logout-form">
+            <input type="hidden" name="csrf_token" value="<?php echo $csrf->generateToken(); ?>">
+            <button type="submit" class="btn-logout">Logout</button>
+        </form>
     </div>
 </body>
 

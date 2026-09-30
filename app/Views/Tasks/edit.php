@@ -19,26 +19,29 @@ $csrf = new CsrfGuard();
 
 <body class="edit-page">
     <div class="container-md">
-        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="margin: 0;">Edit Task</h2>
-            <form action="/logout" method="POST" style="margin: 0;">
-                <input type="hidden" name="csrf_token" value="<?php echo $csrf->generateToken(); ?>">
-                <button type="submit" class="btn-danger">Logout</button>
-            </form>
-        </header>
+        <h2>Edit Task</h2>
 
         <form action="/update/<?php echo (int) $task->id; ?>" method="POST">
             <input type="hidden" name="csrf_token" value="<?php echo $csrf->generateToken(); ?>">
+
+            <label for="name">Task name</label>
             <input type="text" id="name" name="name" value="<?php echo htmlspecialchars($task->name); ?>" required
-                maxlength="255" pattern="[A-Za-z0-9\s\-_.,!?]{3,255}"><br>
-            <small>Task name must be 3-255 characters.</small><br><br>
+                maxlength="255" pattern="[A-Za-z0-9\s\-_.,!?]{3,255}">
+            <small>Task name must be 3-255 characters.</small>
 
-            <label for="completed">Completed:</label><br>
-            <input type="checkbox" id="completed" name="completed" value="1" <?php echo $task->completed ? 'checked' : ''; ?>><br><br>
+            <label for="completed">
+                <input type="checkbox" id="completed" name="completed" value="1" <?php echo $task->completed ? 'checked' : ''; ?>>
+                Completed
+            </label>
 
-            <button type="submit" class="btn-update">Update Task</button>
+            <button type="submit" class="btn-primary">Update Task</button>
         </form>
         <a href="/">Back to Task List</a>
+
+        <form action="/logout" method="POST" class="logout-form">
+            <input type="hidden" name="csrf_token" value="<?php echo $csrf->generateToken(); ?>">
+            <button type="submit" class="btn-logout">Logout</button>
+        </form>
     </div>
 </body>
 
