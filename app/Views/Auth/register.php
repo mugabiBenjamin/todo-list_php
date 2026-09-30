@@ -25,7 +25,10 @@ $csrf = new CsrfGuard();
 
             <label for="password">Password</label>
             <input type="password" id="password" name="password" required minlength="8" placeholder="Min. 8 characters">
-            <small>Password must be at least 8 characters.</small>
+            <small>Password must be at least 8 characters.</small><br><br>
+
+            <label for="password_confirmation">Confirm Password</label>
+            <input type="password" id="password_confirmation" name="password_confirmation" required minlength="8" placeholder="Confirm your password"><br><br>
 
             <button type="submit" class="btn-primary">Register</button>
         </form>
