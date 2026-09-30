@@ -20,6 +20,7 @@ class AuthValidator
         $this->errors = [];
         $this->validateEmail($data['email'] ?? '');
         $this->validatePasswordStrength($data['password'] ?? '');
+        $this->validatePasswordMatch($data['password'] ?? '', $data['password_confirmation'] ?? '');
         return empty($this->errors);
     }
 
@@ -51,6 +52,13 @@ class AuthValidator
     {
         if (strlen($password) < self::MIN_PASSWORD_LENGTH) {
             $this->errors[] = sprintf('Password must be at least %d characters long.', self::MIN_PASSWORD_LENGTH);
+        }
+    }
+
+    private function validatePasswordMatch(string $password, string $passwordConfirmation): void
+    {
+        if ($password !== $passwordConfirmation) {
+            $this->errors[] = 'Passwords do not match.';
         }
     }
 }

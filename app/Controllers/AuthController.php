@@ -82,10 +82,15 @@ class AuthController
 
         $this->csrf->verifyToken($data['csrf_token'] ?? '');
 
-        $email    = $this->sanitizer->validateEmail($data['email'] ?? '');
-        $password = $data['password'] ?? ''; 
+        $email                = $this->sanitizer->validateEmail($data['email'] ?? '');
+        $password             = $data['password'] ?? ''; 
+        $passwordConfirmation = $data['password_confirmation'] ?? '';
 
-        if (!$email || !$this->validator->validateRegistration(['email' => $email, 'password' => $password])) {
+        if (!$email || !$this->validator->validateRegistration([
+            'email'                 => $email, 
+            'password'              => $password,
+            'password_confirmation' => $passwordConfirmation
+        ])) {
             http_response_code(400);
             echo $this->validator->firstError();
             return;
