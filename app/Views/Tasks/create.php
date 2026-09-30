@@ -16,22 +16,24 @@ $csrf = new CsrfGuard();
 
 <body class="create-page">
     <div class="container-md">
-        <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="margin: 0;">Create New Task</h2>
-            <form action="/logout" method="POST" style="margin: 0;">
-                <input type="hidden" name="csrf_token" value="<?php echo $csrf->generateToken(); ?>">
-                <button type="submit" class="btn-danger">Logout</button>
-            </form>
-        </header>
+        <h2>Create New Task</h2>
 
         <form action="/tasks" method="POST">
             <input type="hidden" name="csrf_token" value="<?php echo $csrf->generateToken(); ?>">
-            <input type="text" id="name" name="name" required maxlength="255" pattern="[A-Za-z0-9\s\-_.,!?]{3,255}"
-                placeholder="Type your task here"><br>
-            <div><button type="submit">Create Task</button></div>
-            <small>Task name must be 3-255 characters.</small><br><br>
+
+            <label for="name">Task name</label>
+            <input type="text" id="name" name="name" required maxlength="255"
+                pattern="[A-Za-z0-9\s\-_.,!?]{3,255}" placeholder="Type your task here">
+            <small>Task name must be 3-255 characters.</small>
+
+            <button type="submit" class="btn-primary">Create Task</button>
         </form>
         <a href="/">Back to Task List</a>
+
+        <form action="/logout" method="POST" class="logout-form">
+            <input type="hidden" name="csrf_token" value="<?php echo $csrf->generateToken(); ?>">
+            <button type="submit" class="btn-logout">Logout</button>
+        </form>
     </div>
 </body>
 
