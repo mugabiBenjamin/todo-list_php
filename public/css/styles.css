@@ -1,24 +1,27 @@
-/* PALETTE — 5 colours: 3 blue shades, grey, black & white */
+/* PALETTE — 3 blue shades, grey, black, white + red accents */
 :root {
-    --blue-deep:   oklch(25% 0.12 240);   /* near-navy, headings / sidebar accent */
-    --blue-mid:    oklch(48% 0.20 240);   /* primary interactive — buttons, links  */
-    --blue-light:  oklch(72% 0.14 240);   /* hover states, highlights, focus rings */
-    --grey:        oklch(55% 0.02 240);   /* muted text, borders, sublabels        */
-    --black:       oklch(12% 0.00   0);   /* body text                             */
-    --white:       oklch(99% 0.00   0);   /* card backgrounds, input fills         */
+    --blue-deep:   oklch(25% 0.12 240);
+    --blue-mid:    oklch(48% 0.20 240);
+    --blue-light:  oklch(72% 0.14 240);
+    --grey:        oklch(55% 0.02 240);
+    --black:       oklch(12% 0.00   0);
+    --white:       oklch(99% 0.00   0);
 
-    /* Derived utility tokens — still strictly within the 5 colours */
-    --grey-subtle: oklch(93% 0.01 240);   /* page background, input bg             */
+    --grey-subtle: oklch(93% 0.01 240);
     --shadow:      oklch(25% 0.12 240 / 0.12);
 
-    /* Space scale */
+    /* Red accents — deep (delete text-link) vs light (logout button) */
+    --red-deep:       oklch(50% 0.22 25);
+    --red-deep-hover: oklch(38% 0.20 25);
+    --red-light:       oklch(68% 0.19 25);
+    --red-light-hover: oklch(58% 0.20 25);
+
     --space-xs: clamp(0.375rem, 0.25rem  + 0.4vw, 0.5rem);
     --space-sm: clamp(0.625rem, 0.5rem   + 0.4vw, 0.875rem);
     --space-md: clamp(1rem,     0.75rem  + 0.5vw, 1.375rem);
     --space-lg: clamp(1.5rem,   1.125rem + 0.75vw, 2rem);
     --space-xl: clamp(2rem,     1.5rem   + 1vw,   2.75rem);
 
-    /* Type scale */
     --text-xs:   clamp(0.75rem,  0.7rem   + 0.1vw, 0.8125rem);
     --text-sm:   clamp(0.875rem, 0.825rem + 0.1vw, 0.9375rem);
     --text-base: clamp(1rem,     0.925rem + 0.15vw, 1.0625rem);
@@ -49,6 +52,11 @@
     }
 }
 
+html {
+    overflow-x: hidden;
+    inline-size: 100%;
+}
+
 /* PAGE */
 body {
     display: grid;
@@ -57,14 +65,17 @@ body {
     padding: var(--space-lg) var(--space-md);
     background-color: var(--grey-subtle);
     color: var(--black);
+    overflow-x: hidden;
+    inline-size: 100%;
 }
 
-/* CARD ============================================================ */
+/* CARD */
 .container-md {
     inline-size: min(520px, 92vw);
+    max-inline-size: 100%;
     background: var(--white);
     border-radius: var(--radius-lg);
-    padding: var(--space-xl) var(--space-xl);
+    padding: var(--space-xl);
     box-shadow:
         0 1px 3px  var(--shadow),
         0 6px 24px var(--shadow);
@@ -93,8 +104,11 @@ body {
     }
 
     & small {
+        display: block;
         color: var(--grey);
         font-size: var(--text-xs);
+        margin-block-start: var(--space-xs);
+        margin-block-end: var(--space-md);
     }
 }
 
@@ -106,7 +120,6 @@ ul {
 .index-page {
     & .container-md {
         & > a {
-            /* "Add New Task" — sits above the list */
             display: inline-flex;
             align-items: center;
             gap: 0.35em;
@@ -132,7 +145,6 @@ ul {
         }
     }
 
-    /* Task list */
     & ul {
         display: flex;
         flex-direction: column;
@@ -156,13 +168,15 @@ ul {
         }
     }
 
-    /* Task name */
     & .task-item {
         flex: 1;
         font-size: var(--text-base);
         color: var(--black);
         font-weight: 500;
         text-align: left;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+        min-inline-size: 0;
 
         &.completed {
             text-decoration: line-through;
@@ -171,7 +185,6 @@ ul {
         }
     }
 
-    /* Action cluster */
     & .task-actions {
         display: flex;
         align-items: center;
@@ -187,6 +200,7 @@ ul {
             padding: var(--space-xs) var(--space-sm);
             border-radius: var(--radius-sm);
             transition: background var(--transition), color var(--transition);
+            white-space: nowrap;
         }
 
         & .btn-mark {
@@ -210,29 +224,25 @@ ul {
                 border-radius: var(--radius-sm);
                 color: var(--blue-mid);
                 transition: background var(--transition), color var(--transition);
+                white-space: nowrap;
 
                 &:hover {
                     background: oklch(93% 0.01 240);
                     color: var(--blue-deep);
                 }
             }
-
-            & .btn-danger {
-                color: oklch(50% 0.22 25);
-
-                &:hover {
-                    background: oklch(95% 0.04 25);
-                    color: oklch(38% 0.2 25);
-                }
-            }
         }
     }
 }
 
-/* SHARED FORM STYLES (create + edit) */
+/* SHARED FORM STYLES — create, edit, auth pages */
 .create-page,
-.edit-page {
-    & input[type="text"] {
+.edit-page,
+.auth-page {
+    & input[type="text"],
+    & input[type="email"],
+    & input[type="password"] {
+        display: block;
         inline-size: 100%;
         padding: var(--space-sm) var(--space-md);
         border: 1.5px solid oklch(85% 0.02 240);
@@ -241,7 +251,6 @@ ul {
         color: var(--black);
         font-size: var(--text-base);
         transition: border-color var(--transition), background var(--transition);
-        margin-block-end: var(--space-xs);
 
         &::placeholder {
             color: var(--grey);
@@ -260,12 +269,12 @@ ul {
         font-size: var(--text-sm);
         font-weight: 600;
         color: var(--blue-deep);
+        margin-block-start: var(--space-md);
         margin-block-end: var(--space-xs);
     }
 
-    & small {
-        display: block;
-        margin-block: var(--space-xs) var(--space-md);
+    & label:first-of-type {
+        margin-block-start: 0;
     }
 
     & .container-md {
@@ -283,34 +292,71 @@ ul {
     }
 }
 
-/* CREATE PAGE — primary button */
-.create-page {
-    & button[type="submit"] {
-        inline-size: 100%;
-        padding: var(--space-sm) var(--space-md);
-        background: var(--blue-mid);
-        color: var(--white);
-        border: none;
-        border-radius: var(--radius-sm);
-        font-size: var(--text-base);
-        font-weight: 700;
-        cursor: pointer;
-        margin-block: var(--space-xs) 0;
-        transition: background var(--transition);
-        letter-spacing: 0.01em;
+/* Primary submit button — shared by create, edit, auth forms */
+.btn-primary {
+    display: block;
+    inline-size: 100%;
+    padding: var(--space-sm) var(--space-md);
+    margin-block-start: var(--space-lg);
+    background: var(--blue-mid);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-base);
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.01em;
+    transition: background var(--transition);
 
-        &:hover {
-            background: var(--blue-deep);
-        }
+    &:hover {
+        background: var(--blue-deep);
+    }
 
-        &:focus-visible {
-            outline: 2px solid var(--blue-light);
-            outline-offset: 3px;
-        }
+    &:focus-visible {
+        outline: 2px solid var(--blue-light);
+        outline-offset: 3px;
     }
 }
 
-/* EDIT PAGE — checkbox + update button */
+/* Delete / destructive text-link button (task list only) */
+.btn-danger {
+    color: var(--red-deep);
+
+    &:hover {
+        background: oklch(95% 0.04 25);
+        color: var(--red-deep-hover);
+    }
+}
+
+/* Logout — always bottom-centre, light red, on every authenticated page */
+.logout-form {
+    display: flex;
+    justify-content: center;
+    margin-block-start: var(--space-xl);
+}
+
+.btn-logout {
+    padding: var(--space-xs) var(--space-lg);
+    background: var(--red-light);
+    color: var(--white);
+    border: none;
+    border-radius: var(--radius-sm);
+    font-size: var(--text-sm);
+    font-weight: 700;
+    cursor: pointer;
+    transition: background var(--transition);
+
+    &:hover {
+        background: var(--red-light-hover);
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--blue-light);
+        outline-offset: 3px;
+    }
+}
+
+/* EDIT PAGE — checkbox */
 .edit-page {
     & input[type="checkbox"] {
         accent-color: var(--blue-mid);
@@ -319,32 +365,19 @@ ul {
         cursor: pointer;
         margin-block-end: var(--space-md);
     }
+}
 
-    & .btn-update {
-        inline-size: 100%;
-        padding: var(--space-sm) var(--space-md);
-        background: var(--blue-mid);
-        color: var(--white);
-        border: none;
-        border-radius: var(--radius-sm);
-        font-size: var(--text-base);
-        font-weight: 700;
-        cursor: pointer;
-        margin-block-start: var(--space-xs);
-        transition: background var(--transition);
-
-        &:hover {
-            background: var(--blue-deep);
-        }
-
-        &:focus-visible {
-            outline: 2px solid var(--blue-light);
-            outline-offset: 3px;
-        }
+/* AUTH PAGE — switch link line */
+.auth-page {
+    & .auth-switch {
+        margin-block-start: var(--space-md);
+        font-size: var(--text-sm);
+        color: var(--grey);
+        text-align: center;
     }
 }
 
-/* ERROR PAGES (404 / 500 share container-md) */
+/* ERROR PAGES (404 / 500) */
 .error-page {
     & .container-md {
         text-align: center;
@@ -391,84 +424,35 @@ ul {
     }
 }
 
-/* AUTH PAGES (login / register) */
-.auth-page {
-    & .container-md {
-        & h2 {
-            margin-block-end: var(--space-lg);
-        }
+/* RESPONSIVE — narrow screens (<378px) */
+@media (max-width: 378px) {
+    body {
+        padding: var(--space-md) var(--space-sm);
     }
 
-    & form {
-        display: flex;
+    .container-md {
+        inline-size: 100%;
+        padding: var(--space-lg) var(--space-md);
+    }
+
+    /* Task name and its actions drop to two stacked lines */
+    .index-page ul li {
         flex-direction: column;
-        gap: 0;
+        align-items: stretch;
+        gap: var(--space-xs);
     }
 
-    & label {
-        display: block;
-        font-size: var(--text-sm);
-        font-weight: 600;
-        color: var(--blue-deep);
-        margin-block-start: var(--space-md);
-        margin-block-end: var(--space-xs);
+    .index-page .task-item {
+        text-align: left;
     }
 
-    & input[type="email"],
-    & input[type="password"] {
-        inline-size: 100%;
-        padding: var(--space-sm) var(--space-md);
-        border: 1.5px solid oklch(85% 0.02 240);
-        border-radius: var(--radius-sm);
-        background: var(--grey-subtle);
-        color: var(--black);
-        font-size: var(--text-base);
-        transition: border-color var(--transition), background var(--transition);
-
-        &::placeholder {
-            color: var(--grey);
-        }
-
-        &:focus {
-            outline: none;
-            border-color: var(--blue-mid);
-            background: var(--white);
-        }
+    .index-page .task-actions {
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: var(--space-xs);
     }
 
-    & small {
-        display: block;
-        margin-block-start: var(--space-xs);
-    }
-
-    & .btn-primary {
-        inline-size: 100%;
-        padding: var(--space-sm) var(--space-md);
-        margin-block-start: var(--space-lg);
-        background: var(--blue-mid);
-        color: var(--white);
-        border: none;
-        border-radius: var(--radius-sm);
-        font-size: var(--text-base);
-        font-weight: 700;
-        cursor: pointer;
-        letter-spacing: 0.01em;
-        transition: background var(--transition);
-
-        &:hover {
-            background: var(--blue-deep);
-        }
-
-        &:focus-visible {
-            outline: 2px solid var(--blue-light);
-            outline-offset: 3px;
-        }
-    }
-
-    & .auth-switch {
-        margin-block-start: var(--space-md);
-        font-size: var(--text-sm);
-        color: var(--grey);
-        text-align: center;
+    .index-page .task-actions .edit-delete {
+        gap: 0.25rem;
     }
 }
